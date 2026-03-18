@@ -215,7 +215,7 @@ footer strong{color:rgba(255,255,255,.6);}
     <li><a href="#how">Jak to funguje</a></li>
   </ul>
   <div>
-    <button class="btn-yellow" data-open-modal>+ Přidat inzerát</button>
+    <button class="btn-yellow" onclick="openModal()">+ Přidat inzerát</button>
   </div>
 </nav>
 
@@ -227,8 +227,8 @@ footer strong{color:rgba(255,255,255,.6);}
       <h1>Najdi si tutora<br>od <span class="hl">spolužáka</span></h1>
       <p class="hero-sub">Studenti VŠE sdílí znalosti navzájem. Nabídni, co umíš — nebo najdi pomoc s předmětem, který ti nejde.</p>
       <div class="hero-actions">
-        <button class="btn-hero-y" data-open-modal data-mode="offer">Nabízím tutoring</button>
-        <button class="btn-hero-o" data-open-modal data-mode="seek">Hledám tutora</button>
+        <button class="btn-hero-y" onclick="openModal(); setMode('offer')">Nabízím tutoring</button>
+        <button class="btn-hero-o" onclick="openModal(); setMode('seek')">Hledám tutora</button>
       </div>
       <div class="hero-stats">
         <div class="stat"><div class="stat-n" id="heroCount">8</div><div class="stat-l">Aktivní nabídky</div></div>
@@ -261,9 +261,9 @@ footer strong{color:rgba(255,255,255,.6);}
       <input class="search-input" id="searchInput" type="text" placeholder="Hledej předmět, jméno nebo téma…">
     </div>
     <div class="pills">
-      <button class="pill active" data-pill="all">Vše</button>
-      <button class="pill" data-pill="offer">Nabízí tutoring</button>
-      <button class="pill" data-pill="seek">Hledá tutora</button>
+      <button class="pill active" onclick="setPill(this,'all')">Vše</button>
+      <button class="pill" onclick="setPill(this,'offer')">Nabízí tutoring</button>
+      <button class="pill" onclick="setPill(this,'seek')">Hledá tutora</button>
     </div>
   </div>
 </div>
@@ -285,18 +285,18 @@ footer strong{color:rgba(255,255,255,.6);}
     <div class="sb-box">
       <div class="sb-title">Předměty</div>
       <ul class="subj-list" id="subjList">
-        <li class="subj-item active" data-subj="all">Všechny <span class="subj-count" id="cntAll">8</span></li>
-        <li class="subj-item" data-subj="Matematika">Matematika <span class="subj-count">—</span></li>
-        <li class="subj-item" data-subj="Statistika">Statistika <span class="subj-count">—</span></li>
-        <li class="subj-item" data-subj="Účetnictví">Účetnictví <span class="subj-count">—</span></li>
-        <li class="subj-item" data-subj="Ekonometrie">Ekonometrie <span class="subj-count">—</span></li>
-        <li class="subj-item" data-subj="Excel">Excel / Data <span class="subj-count">—</span></li>
-        <li class="subj-item" data-subj="Právo">Právo <span class="subj-count">—</span></li>
-        <li class="subj-item" data-subj="Makroekonomie">Makroekonomie <span class="subj-count">—</span></li>
-        <li class="subj-item" data-subj="Angličtina">Jazyky <span class="subj-count">—</span></li>
+        <li class="subj-item active" onclick="filterSubject(this,'all')">Všechny <span class="subj-count" id="cntAll">8</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Matematika')">Matematika <span class="subj-count">—</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Statistika')">Statistika <span class="subj-count">—</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Účetnictví')">Účetnictví <span class="subj-count">—</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Ekonometrie')">Ekonometrie <span class="subj-count">—</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Excel')">Excel / Data <span class="subj-count">—</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Právo')">Právo <span class="subj-count">—</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Makroekonomie')">Makroekonomie <span class="subj-count">—</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Angličtina')">Jazyky <span class="subj-count">—</span></li>
       </ul>
     </div>
-    <button class="btn-yellow" style="width:100%;padding:.75rem;font-size:.92rem;border-radius:8px;" data-open-modal>+ Přidat svou nabídku</button>
+    <button class="btn-yellow" style="width:100%;padding:.75rem;font-size:.92rem;border-radius:8px;" onclick="openModal()">+ Přidat svou nabídku</button>
   </aside>
 
   <div>
@@ -332,7 +332,7 @@ footer strong{color:rgba(255,255,255,.6);}
 <!-- ========== MODAL ========== -->
 <div class="overlay" id="mainModal">
   <div class="modal">
-    <button class="modal-x" data-close-modal>✕</button>
+    <button class="modal-x" onclick="closeModal()">✕</button>
 
     <div id="modalForm">
       <div class="modal-badge">VŠE</div>
@@ -341,8 +341,8 @@ footer strong{color:rgba(255,255,255,.6);}
 
       <!-- Mode toggle -->
       <div class="mode-toggle">
-        <button class="mode-btn active" id="modeOffer">🎓 Nabízím tutoring</button>
-        <button class="mode-btn" id="modeSeek">📚 Hledám tutora</button>
+        <button class="mode-btn active" id="modeOffer" onclick="setMode('offer')">🎓 Nabízím tutoring</button>
+        <button class="mode-btn" id="modeSeek" onclick="setMode('seek')">📚 Hledám tutora</button>
       </div>
 
       <!-- Jméno + Email -->
@@ -415,7 +415,7 @@ footer strong{color:rgba(255,255,255,.6);}
         <div class="form-hint">Nechej prázdné, pokud cenu zatím neuvádíš.</div>
       </div>
 
-      <button class="btn-submit">Zveřejnit inzerát →</button>
+      <button class="btn-submit" id="submitBtn" onclick="submitListing()">Zveřejnit inzerát →</button>
     </div>
 
     <!-- Success state -->
@@ -538,7 +538,7 @@ function renderListings(){
   const cnt  = document.getElementById('listCount');
 
   if(!data.length){
-    grid.innerHTML = `<div class="empty-state">🔎 Žádné inzeráty nenalezeny. Zkus jiný filtr nebo <strong data-open-modal style="cursor:pointer;color:var(--navy)">přidej první nabídku</strong>.</div>`;
+    grid.innerHTML = `<div class="empty-state">🔎 Žádné inzeráty nenalezeny. Zkus jiný filtr nebo <strong onclick="openModal()" style="cursor:pointer;color:var(--navy)">přidej první nabídku</strong>.</div>`;
     cnt.innerHTML  = '0 inzerátů';
     updateSidebarCounts();
     return;
@@ -742,64 +742,16 @@ const DEMO_LISTINGS = [
   {id:8,created_at:'2025-01-08',name:'Eva Nováková',   faculty:'FMV',year:'3. ročník Bc.', type:'seek', subjects:['Angličtina','Španělština'],                   desc:'Hledám konverzačního partnera pro zlepšení španělštiny.',                               price:null,free:false,email:'xnovae08@vse.cz'},
 ];
 
-// ─── INIT + EVENT LISTENERS ─────────────────────────────────────
+// ─── INIT ───────────────────────────────────────────────────────
 setMode('offer');
 loadListings();
-
-// Submit
-document.getElementById('submitBtn').addEventListener('click', submitListing);
-
-// Mode toggle
-document.getElementById('modeOffer').addEventListener('click', () => setMode('offer'));
-document.getElementById('modeSeek').addEventListener('click',  () => setMode('seek'));
-
-// Free checkbox
-document.getElementById('freeChk').addEventListener('change', toggleFree);
-
-// Close modal on overlay click
-document.getElementById('mainModal').addEventListener('click', e => {
+document.getElementById('searchInput').addEventListener('input', renderListings);
+document.getElementById('facFilter').addEventListener('change', renderListings);
+document.getElementById('sortSel').addEventListener('change', renderListings);
+document.getElementById('mainModal').addEventListener('click', function(e){
   if(e.target === document.getElementById('mainModal')) closeModal();
 });
 
-// Open modal buttons (hero + nav + sidebar)
-document.querySelectorAll('[data-open-modal]').forEach(el =>
-  el.addEventListener('click', () => {
-    openModal();
-    const mode = el.getAttribute('data-mode');
-    if(mode) setTimeout(() => setMode(mode), 50);
-  })
-);
-
-// Close modal buttons
-document.querySelectorAll('[data-close-modal]').forEach(el =>
-  el.addEventListener('click', closeModal)
-);
-
-// Filter pills
-document.querySelectorAll('[data-pill]').forEach(btn =>
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    filterMode = btn.getAttribute('data-pill');
-    renderListings();
-  })
-);
-
-// Subject sidebar items
-document.querySelectorAll('[data-subj]').forEach(el =>
-  el.addEventListener('click', () => {
-    document.querySelectorAll('.subj-item').forEach(i => i.classList.remove('active'));
-    el.classList.add('active');
-    activeSubj = el.getAttribute('data-subj');
-    renderListings();
-  })
-);
-
-// Clear errors on input
-['inpName','inpEmail','inpFac','inpYear','inpSubjects'].forEach(id => {
-  const el = document.getElementById(id);
-  if(el) el.addEventListener(el.tagName==='SELECT' ? 'change' : 'input', () => clearErr(id));
-});
 </script>
 </body>
 </html>
