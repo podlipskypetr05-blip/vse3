@@ -429,16 +429,15 @@ footer strong{color:rgba(255,255,255,.6);}
 
 <div class="toast" id="toast"></div>
 
-<script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
 // ================================================================
 //  ⚙️  DOPLŇ SVOJE SUPABASE KLÍČE ZDE
 // ================================================================
 const SUPABASE_URL = 'https://oppslcsfrflbaynfefni.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wcHNsY3NmcmZsYmF5bmZlZm5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NTc0NTIsImV4cCI6MjA4OTQzMzQ1Mn0.mW9lwmZDlqppeO6irY9RD--mc6H9pVnOAC5pGhyEyaE';
 // ================================================================
-const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ─── CONSTANTS ──────────────────────────────────────────────────
 const COLORS = ['#003366','#1A6EC2','#C9A84C','#2C5545','#8B3A3A','#5B3F9A','#1A7A4A','#8A6B00'];
@@ -582,14 +581,14 @@ function updateSidebarCounts(){
 }
 
 // ─── FILTRY ─────────────────────────────────────────────────────
-window.setPill = function(btn, mode){
+function setPill(btn, mode){
   document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
   filterMode = (mode==='offer') ? 'offer' : (mode==='seek') ? 'seek' : 'all';
   renderListings();
 };
 
-window.filterSubject = function(el, s){
+function filterSubject(el, s){
   document.querySelectorAll('.subj-item').forEach(i=>i.classList.remove('active'));
   el.classList.add('active');
   activeSubj = s;
@@ -601,11 +600,11 @@ document.getElementById('facFilter').addEventListener('change', renderListings);
 document.getElementById('sortSel').addEventListener('change', renderListings);
 
 // ─── MODAL ──────────────────────────────────────────────────────
-window.openModal = function(){
+function openModal(){
   document.getElementById('mainModal').classList.add('open');
 };
 
-window.closeModal = function(){
+function closeModal(){
   document.getElementById('mainModal').classList.remove('open');
   document.getElementById('modalForm').style.display    = 'block';
   document.getElementById('successPanel').style.display = 'none';
@@ -624,10 +623,10 @@ window.closeModal = function(){
 };
 
 document.getElementById('mainModal').addEventListener('click', e => {
-  if(e.target === document.getElementById('mainModal')) window.closeModal();
+  if(e.target === document.getElementById('mainModal')) closeModal();
 });
 
-window.setMode = function(m){
+function setMode(m){
   currentMode = m;
   document.getElementById('modeOffer').classList.toggle('active', m==='offer');
   document.getElementById('modeSeek').classList.toggle('active',  m==='seek');
@@ -635,7 +634,7 @@ window.setMode = function(m){
   document.getElementById('priceGrp').style.display = m==='offer' ? 'block' : 'none';
 };
 
-window.toggleFree = function(){
+function toggleFree(){
   const c = document.getElementById('freeChk').checked;
   document.getElementById('inpPrice').disabled = c;
   if(c) document.getElementById('inpPrice').value = '';
@@ -650,12 +649,12 @@ function clearAllErrors(){
   document.querySelectorAll('.field-err').forEach(e=>e.classList.remove('show'));
   document.querySelectorAll('.form-input,.form-select').forEach(e=>e.classList.remove('err'));
 }
-window.clearErr = function(fieldId){
+function clearErr(fieldId){
   document.getElementById(fieldId).classList.remove('err');
 };
 
 // ─── ULOŽENÍ DO DATABÁZE ────────────────────────────────────────
-window.submitListing = async function(){
+async function submitListing(){
   clearAllErrors();
 
   const name     = document.getElementById('inpName').value.trim();
@@ -726,7 +725,7 @@ function showSuccess(name){
   document.getElementById('modalForm').style.display    = 'none';
   document.getElementById('successPanel').style.display = 'block';
   setTimeout(() => {
-    window.closeModal();
+    closeModal();
     showToast(`Inzerát od ${name} byl přidán! 🎓`);
   }, 2500);
 }
