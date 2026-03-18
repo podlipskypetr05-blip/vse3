@@ -215,7 +215,7 @@ footer strong{color:rgba(255,255,255,.6);}
     <li><a href="#how">Jak to funguje</a></li>
   </ul>
   <div>
-    <button class="btn-yellow" onclick="window.openModal()">+ Přidat inzerát</button>
+    <button class="btn-yellow" data-open-modal>+ Přidat inzerát</button>
   </div>
 </nav>
 
@@ -227,8 +227,8 @@ footer strong{color:rgba(255,255,255,.6);}
       <h1>Najdi si tutora<br>od <span class="hl">spolužáka</span></h1>
       <p class="hero-sub">Studenti VŠE sdílí znalosti navzájem. Nabídni, co umíš — nebo najdi pomoc s předmětem, který ti nejde.</p>
       <div class="hero-actions">
-        <button class="btn-hero-y" onclick="window.openModal(); setTimeout(()=>window.setMode('offer'),50)">Nabízím tutoring</button>
-        <button class="btn-hero-o" onclick="window.openModal(); setTimeout(()=>window.setMode('seek'),50)">Hledám tutora</button>
+        <button class="btn-hero-y" data-open-modal data-mode="offer">Nabízím tutoring</button>
+        <button class="btn-hero-o" data-open-modal data-mode="seek">Hledám tutora</button>
       </div>
       <div class="hero-stats">
         <div class="stat"><div class="stat-n" id="heroCount">8</div><div class="stat-l">Aktivní nabídky</div></div>
@@ -261,9 +261,9 @@ footer strong{color:rgba(255,255,255,.6);}
       <input class="search-input" id="searchInput" type="text" placeholder="Hledej předmět, jméno nebo téma…">
     </div>
     <div class="pills">
-      <button class="pill active" onclick="window.setPill(this,'all')">Vše</button>
-      <button class="pill" onclick="window.setPill(this,'offer')">Nabízí tutoring</button>
-      <button class="pill" onclick="window.setPill(this,'seek')">Hledá tutora</button>
+      <button class="pill active" data-pill="all">Vše</button>
+      <button class="pill" data-pill="offer">Nabízí tutoring</button>
+      <button class="pill" data-pill="seek">Hledá tutora</button>
     </div>
   </div>
 </div>
@@ -285,18 +285,18 @@ footer strong{color:rgba(255,255,255,.6);}
     <div class="sb-box">
       <div class="sb-title">Předměty</div>
       <ul class="subj-list" id="subjList">
-        <li class="subj-item active" onclick="window.filterSubject(this,'all')">Všechny <span class="subj-count" id="cntAll">8</span></li>
-        <li class="subj-item" onclick="window.filterSubject(this,'Matematika')">Matematika <span class="subj-count">—</span></li>
-        <li class="subj-item" onclick="window.filterSubject(this,'Statistika')">Statistika <span class="subj-count">—</span></li>
-        <li class="subj-item" onclick="window.filterSubject(this,'Účetnictví')">Účetnictví <span class="subj-count">—</span></li>
-        <li class="subj-item" onclick="window.filterSubject(this,'Ekonometrie')">Ekonometrie <span class="subj-count">—</span></li>
-        <li class="subj-item" onclick="window.filterSubject(this,'Excel')">Excel / Data <span class="subj-count">—</span></li>
-        <li class="subj-item" onclick="window.filterSubject(this,'Právo')">Právo <span class="subj-count">—</span></li>
-        <li class="subj-item" onclick="window.filterSubject(this,'Makroekonomie')">Makroekonomie <span class="subj-count">—</span></li>
-        <li class="subj-item" onclick="window.filterSubject(this,'Angličtina')">Jazyky <span class="subj-count">—</span></li>
+        <li class="subj-item active" data-subj="all">Všechny <span class="subj-count" id="cntAll">8</span></li>
+        <li class="subj-item" data-subj="Matematika">Matematika <span class="subj-count">—</span></li>
+        <li class="subj-item" data-subj="Statistika">Statistika <span class="subj-count">—</span></li>
+        <li class="subj-item" data-subj="Účetnictví">Účetnictví <span class="subj-count">—</span></li>
+        <li class="subj-item" data-subj="Ekonometrie">Ekonometrie <span class="subj-count">—</span></li>
+        <li class="subj-item" data-subj="Excel">Excel / Data <span class="subj-count">—</span></li>
+        <li class="subj-item" data-subj="Právo">Právo <span class="subj-count">—</span></li>
+        <li class="subj-item" data-subj="Makroekonomie">Makroekonomie <span class="subj-count">—</span></li>
+        <li class="subj-item" data-subj="Angličtina">Jazyky <span class="subj-count">—</span></li>
       </ul>
     </div>
-    <button class="btn-yellow" style="width:100%;padding:.75rem;font-size:.92rem;border-radius:8px;" onclick="window.openModal()">+ Přidat svou nabídku</button>
+    <button class="btn-yellow" style="width:100%;padding:.75rem;font-size:.92rem;border-radius:8px;" data-open-modal>+ Přidat svou nabídku</button>
   </aside>
 
   <div>
@@ -332,7 +332,7 @@ footer strong{color:rgba(255,255,255,.6);}
 <!-- ========== MODAL ========== -->
 <div class="overlay" id="mainModal">
   <div class="modal">
-    <button class="modal-x" onclick="window.closeModal()">✕</button>
+    <button class="modal-x" data-close-modal>✕</button>
 
     <div id="modalForm">
       <div class="modal-badge">VŠE</div>
@@ -341,20 +341,20 @@ footer strong{color:rgba(255,255,255,.6);}
 
       <!-- Mode toggle -->
       <div class="mode-toggle">
-        <button class="mode-btn active" id="modeOffer" onclick="window.setMode('offer')">🎓 Nabízím tutoring</button>
-        <button class="mode-btn" id="modeSeek" onclick="window.setMode('seek')">📚 Hledám tutora</button>
+        <button class="mode-btn active" id="modeOffer">🎓 Nabízím tutoring</button>
+        <button class="mode-btn" id="modeSeek">📚 Hledám tutora</button>
       </div>
 
       <!-- Jméno + Email -->
       <div class="row-2">
         <div class="form-group">
           <label class="form-label">Jméno a příjmení *</label>
-          <input class="form-input" id="inpName" type="text" placeholder="Jan Novák" oninput="window.clearErr('inpName')">
+          <input class="form-input" id="inpName" type="text" placeholder="Jan Novák">
           <div class="field-err" id="errName">Zadej prosím jméno.</div>
         </div>
         <div class="form-group">
           <label class="form-label">Školní email *</label>
-          <input class="form-input" id="inpEmail" type="email" placeholder="xnovj00@vse.cz" oninput="window.clearErr('inpEmail')">
+          <input class="form-input" id="inpEmail" type="email" placeholder="xnovj00@vse.cz">
           <div class="field-err" id="errEmail">Zadej @vse.cz email.</div>
         </div>
       </div>
@@ -363,7 +363,7 @@ footer strong{color:rgba(255,255,255,.6);}
       <div class="row-2">
         <div class="form-group">
           <label class="form-label">Fakulta *</label>
-          <select class="form-select" id="inpFac" onchange="window.clearErr('inpFac')">
+          <select class="form-select" id="inpFac">
             <option value="">— Vyber fakultu —</option>
             <option value="FIS">FIS – Informatika a statistika</option>
             <option value="FFÚ">FFÚ – Finance a účetnictví</option>
@@ -375,7 +375,7 @@ footer strong{color:rgba(255,255,255,.6);}
         </div>
         <div class="form-group">
           <label class="form-label">Ročník *</label>
-          <select class="form-select" id="inpYear" onchange="window.clearErr('inpYear')">
+          <select class="form-select" id="inpYear">
             <option value="">— Vyber ročník —</option>
             <option value="1. ročník Bc.">1. ročník Bc.</option>
             <option value="2. ročník Bc.">2. ročník Bc.</option>
@@ -390,7 +390,7 @@ footer strong{color:rgba(255,255,255,.6);}
       <!-- Předměty — prostý textarea, žádný tag input -->
       <div class="form-group">
         <label class="form-label" id="subjLabel">Předměty, které učím *</label>
-        <input class="form-input" id="inpSubjects" type="text" placeholder="např. Matematika, Statistika, Excel" oninput="window.clearErr('inpSubjects')">
+        <input class="form-input" id="inpSubjects" type="text" placeholder="např. Matematika, Statistika, Excel">
         <div class="form-hint">Odděl předměty čárkou. Stačí napsat a kliknout Zveřejnit.</div>
         <div class="field-err" id="errSubjects">Zadej alespoň jeden předmět.</div>
       </div>
@@ -415,7 +415,7 @@ footer strong{color:rgba(255,255,255,.6);}
         <div class="form-hint">Nechej prázdné, pokud cenu zatím neuvádíš.</div>
       </div>
 
-      <button class="btn-submit" onclick="window.submitListing()">Zveřejnit inzerát →</button>
+      <button class="btn-submit">Zveřejnit inzerát →</button>
     </div>
 
     <!-- Success state -->
@@ -430,14 +430,14 @@ footer strong{color:rgba(255,255,255,.6);}
 <div class="toast" id="toast"></div>
 
 <script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
 // ================================================================
 //  ⚙️  DOPLŇ SVOJE SUPABASE KLÍČE ZDE
 // ================================================================
-const SUPABASE_URL = 'https://oppslcsfrflbaynfefni.supabase.co';   // Project Settings → API → Project URL
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wcHNsY3NmcmZsYmF5bmZlZm5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NTc0NTIsImV4cCI6MjA4OTQzMzQ1Mn0.mW9lwmZDlqppeO6irY9RD--mc6H9pVnOAC5pGhyEyaE';   // Project Settings → API → anon public
+const SUPABASE_URL = 'https://oppslcsfrflbaynfefni.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wcHNsY3NmcmZsYmF5bmZlZm5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NTc0NTIsImV4cCI6MjA4OTQzMzQ1Mn0.mW9lwmZDlqppeO6irY9RD--mc6H9pVnOAC5pGhyEyaE';
 // ================================================================
-
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ─── CONSTANTS ──────────────────────────────────────────────────
@@ -539,7 +539,7 @@ function renderListings(){
   const cnt  = document.getElementById('listCount');
 
   if(!data.length){
-    grid.innerHTML = `<div class="empty-state">🔎 Žádné inzeráty nenalezeny. Zkus jiný filtr nebo <strong onclick="window.openModal()" style="cursor:pointer;color:var(--navy)">přidej první nabídku</strong>.</div>`;
+    grid.innerHTML = `<div class="empty-state">🔎 Žádné inzeráty nenalezeny. Zkus jiný filtr nebo <strong data-open-modal style="cursor:pointer;color:var(--navy)">přidej první nabídku</strong>.</div>`;
     cnt.innerHTML  = '0 inzerátů';
     updateSidebarCounts();
     return;
@@ -743,9 +743,64 @@ const DEMO_LISTINGS = [
   {id:8,created_at:'2025-01-08',name:'Eva Nováková',   faculty:'FMV',year:'3. ročník Bc.', type:'seek', subjects:['Angličtina','Španělština'],                   desc:'Hledám konverzačního partnera pro zlepšení španělštiny.',                               price:null,free:false,email:'xnovae08@vse.cz'},
 ];
 
-// ─── INIT ───────────────────────────────────────────────────────
+// ─── INIT + EVENT LISTENERS ─────────────────────────────────────
 setMode('offer');
 loadListings();
+
+// Submit
+document.getElementById('submitBtn').addEventListener('click', submitListing);
+
+// Mode toggle
+document.getElementById('modeOffer').addEventListener('click', () => setMode('offer'));
+document.getElementById('modeSeek').addEventListener('click',  () => setMode('seek'));
+
+// Free checkbox
+document.getElementById('freeChk').addEventListener('change', toggleFree);
+
+// Close modal on overlay click
+document.getElementById('mainModal').addEventListener('click', e => {
+  if(e.target === document.getElementById('mainModal')) closeModal();
+});
+
+// Open modal buttons (hero + nav + sidebar)
+document.querySelectorAll('[data-open-modal]').forEach(el =>
+  el.addEventListener('click', () => {
+    openModal();
+    const mode = el.getAttribute('data-mode');
+    if(mode) setTimeout(() => setMode(mode), 50);
+  })
+);
+
+// Close modal buttons
+document.querySelectorAll('[data-close-modal]').forEach(el =>
+  el.addEventListener('click', closeModal)
+);
+
+// Filter pills
+document.querySelectorAll('[data-pill]').forEach(btn =>
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    filterMode = btn.getAttribute('data-pill');
+    renderListings();
+  })
+);
+
+// Subject sidebar items
+document.querySelectorAll('[data-subj]').forEach(el =>
+  el.addEventListener('click', () => {
+    document.querySelectorAll('.subj-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+    activeSubj = el.getAttribute('data-subj');
+    renderListings();
+  })
+);
+
+// Clear errors on input
+['inpName','inpEmail','inpFac','inpYear','inpSubjects'].forEach(id => {
+  const el = document.getElementById(id);
+  if(el) el.addEventListener(el.tagName==='SELECT' ? 'change' : 'input', () => clearErr(id));
+});
 </script>
 </body>
 </html>
