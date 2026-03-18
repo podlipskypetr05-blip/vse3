@@ -3,32 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VŠE Tutoring — Student Peer Help Platform</title>
+<title>VŠE TutoringHub</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Epilogue:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
-:root{
-  --navy:#003366;--navy-dark:#00244d;--navy-mid:#0a4080;
-  --blue:#1A6EC2;--yellow:#F5C842;--off:#F4F7FA;
-  --muted:#6B7A8D;--border:#DDE3EC;--text:#1A2333;
-  --red:#D93025;--red-bg:#FEF0EF;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
+:root{--navy:#003366;--navy-dark:#00244d;--navy-mid:#0a4080;--blue:#1A6EC2;--yellow:#F5C842;--off:#F4F7FA;--muted:#6B7A8D;--border:#DDE3EC;--text:#1A2333;--red:#D93025;--red-bg:#FEF0EF;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
 body{font-family:'Epilogue',sans-serif;background:var(--off);color:var(--text);}
-
-/* NAV */
 nav{background:var(--navy);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;}
 .logo{display:flex;align-items:center;gap:.75rem;}
 .logo-badge{background:var(--yellow);color:var(--navy-dark);font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;padding:.3rem .65rem;border-radius:6px;}
 .logo-text{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:white;}
 .logo-text span{color:var(--yellow);}
 .nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
-.nav-links a{text-decoration:none;color:rgba(255,255,255,.65);font-size:.88rem;font-weight:500;transition:color .2s;}
+.nav-links a{text-decoration:none;color:rgba(255,255,255,.65);font-size:.88rem;font-weight:500;}
 .nav-links a:hover{color:white;}
-.btn-yellow{padding:.45rem 1.1rem;border:none;border-radius:6px;background:var(--yellow);color:var(--navy-dark);font-family:'Epilogue',sans-serif;font-size:.84rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.btn-yellow{padding:.45rem 1.1rem;border:none;border-radius:6px;background:var(--yellow);color:var(--navy-dark);font-family:'Epilogue',sans-serif;font-size:.84rem;font-weight:700;cursor:pointer;}
 .btn-yellow:hover{background:#e6b830;}
-
-/* HERO */
 .hero{background:var(--navy);padding:5rem 5% 0;overflow:hidden;position:relative;}
 .hero::before{content:'';position:absolute;top:-60px;right:-60px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(26,110,194,.35) 0%,transparent 70%);pointer-events:none;}
 .hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:4rem;align-items:end;}
@@ -37,9 +28,9 @@ nav{background:var(--navy);padding:0 5%;display:flex;align-items:center;justify-
 .hero h1 .hl{color:var(--yellow);}
 .hero-sub{color:rgba(255,255,255,.6);font-size:1rem;line-height:1.7;max-width:480px;margin-bottom:2rem;}
 .hero-actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:3rem;}
-.btn-hero-y{padding:.8rem 1.8rem;background:var(--yellow);color:var(--navy-dark);border:none;border-radius:8px;font-family:'Epilogue',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s;}
-.btn-hero-y:hover{background:#e6b830;transform:translateY(-1px);}
-.btn-hero-o{padding:.8rem 1.8rem;background:none;color:white;border:1.5px solid rgba(255,255,255,.35);border-radius:8px;font-family:'Epilogue',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-hero-y{padding:.8rem 1.8rem;background:var(--yellow);color:var(--navy-dark);border:none;border-radius:8px;font-family:'Epilogue',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;}
+.btn-hero-y:hover{background:#e6b830;}
+.btn-hero-o{padding:.8rem 1.8rem;background:none;color:white;border:1.5px solid rgba(255,255,255,.35);border-radius:8px;font-family:'Epilogue',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;}
 .btn-hero-o:hover{border-color:white;background:rgba(255,255,255,.08);}
 .hero-stats{display:flex;gap:2.5rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.12);}
 .stat-n{font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:800;color:var(--yellow);}
@@ -51,40 +42,31 @@ nav{background:var(--navy);padding:0 5%;display:flex;align-items:center;justify-
 @keyframes fc{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 .fc-top{display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem;}
 .fc-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.78rem;color:var(--navy-dark);background:var(--yellow);flex-shrink:0;}
-.fc-name{font-weight:600;font-size:.85rem;color:white;}
-.fc-fac{font-size:.73rem;color:rgba(255,255,255,.5);}
+.fc-name{font-weight:600;font-size:.85rem;color:white;}.fc-fac{font-size:.73rem;color:rgba(255,255,255,.5);}
 .fc-tags{display:flex;flex-wrap:wrap;gap:.3rem;}
 .fc-tag{padding:.18rem .55rem;border-radius:4px;font-size:.7rem;font-weight:600;}
-.fc-teach{background:rgba(245,200,66,.2);color:var(--yellow);}
-.fc-seek{background:rgba(26,110,194,.3);color:#7BBFFF;}
-
-/* SEARCH */
+.fc-teach{background:rgba(245,200,66,.2);color:var(--yellow);}.fc-seek{background:rgba(26,110,194,.3);color:#7BBFFF;}
 .search-bar{background:white;border-bottom:1px solid var(--border);padding:1.25rem 5%;position:sticky;top:64px;z-index:90;}
 .search-inner{max-width:1200px;margin:0 auto;display:flex;gap:.75rem;align-items:center;}
 .search-wrap{flex:1;position:relative;}
 .search-wrap .ico{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--muted);}
-.search-input{width:100%;padding:.75rem 1rem .75rem 2.75rem;border:1.5px solid var(--border);border-radius:8px;font-family:'Epilogue',sans-serif;font-size:.9rem;outline:none;background:var(--off);transition:border-color .2s;}
+.search-input{width:100%;padding:.75rem 1rem .75rem 2.75rem;border:1.5px solid var(--border);border-radius:8px;font-family:'Epilogue',sans-serif;font-size:.9rem;outline:none;background:var(--off);}
 .search-input:focus{border-color:var(--navy);background:white;}
 .pills{display:flex;gap:.4rem;}
-.pill{padding:.55rem 1rem;border-radius:6px;border:1.5px solid var(--border);background:none;font-family:'Epilogue',sans-serif;font-size:.82rem;font-weight:500;cursor:pointer;color:var(--muted);transition:all .2s;white-space:nowrap;}
+.pill{padding:.55rem 1rem;border-radius:6px;border:1.5px solid var(--border);background:none;font-family:'Epilogue',sans-serif;font-size:.82rem;font-weight:500;cursor:pointer;color:var(--muted);white-space:nowrap;}
 .pill:hover{border-color:var(--navy);color:var(--navy);}
 .pill.active{background:var(--navy);color:white;border-color:var(--navy);}
-
-/* MAIN LAYOUT */
 .main{max-width:1200px;margin:0 auto;padding:2.5rem 5%;display:grid;grid-template-columns:240px 1fr;gap:2rem;align-items:start;}
 .sidebar{position:sticky;top:140px;}
 .sb-box{background:white;border:1px solid var(--border);border-radius:12px;padding:1.4rem;margin-bottom:1rem;}
 .sb-title{font-family:'Syne',sans-serif;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:1rem;}
 .subj-list{list-style:none;}
-.subj-item{display:flex;justify-content:space-between;align-items:center;padding:.5rem .6rem;border-radius:6px;cursor:pointer;font-size:.88rem;transition:all .15s;}
+.subj-item{display:flex;justify-content:space-between;align-items:center;padding:.5rem .6rem;border-radius:6px;cursor:pointer;font-size:.88rem;}
 .subj-item:hover{background:var(--off);color:var(--navy);}
 .subj-item.active{background:#EEF3FF;color:var(--navy);font-weight:600;}
 .subj-count{font-size:.75rem;background:var(--border);color:var(--muted);padding:.1rem .45rem;border-radius:2rem;}
 .subj-item.active .subj-count{background:var(--navy);color:white;}
 .fac-sel{width:100%;padding:.6rem .8rem;border:1.5px solid var(--border);border-radius:6px;font-family:'Epilogue',sans-serif;font-size:.86rem;color:var(--text);background:white;outline:none;}
-.fac-sel:focus{border-color:var(--navy);}
-
-/* LISTINGS */
 .lh{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;}
 .lh-count{font-size:.88rem;color:var(--muted);}
 .lh-count strong{color:var(--text);font-weight:600;}
@@ -92,14 +74,12 @@ nav{background:var(--navy);padding:0 5%;display:flex;align-items:center;justify-
 .grid{display:grid;gap:1rem;}
 .card{background:white;border:1px solid var(--border);border-radius:12px;padding:1.4rem 1.6rem;display:grid;grid-template-columns:auto 1fr auto;gap:1rem;align-items:start;transition:all .2s;}
 .card:hover{border-color:var(--navy);box-shadow:0 4px 20px rgba(0,51,102,.1);transform:translateY(-2px);}
-.card.offering{border-left:3px solid var(--yellow);}
-.card.seeking{border-left:3px solid var(--blue);}
+.card.offering{border-left:3px solid var(--yellow);}.card.seeking{border-left:3px solid var(--blue);}
 .av{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:white;flex-shrink:0;}
 .card-top{display:flex;align-items:center;gap:.6rem;margin-bottom:.3rem;flex-wrap:wrap;}
 .card-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;}
 .type-badge{padding:.2rem .6rem;border-radius:4px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
-.badge-offer{background:#FFF3C4;color:#8A6B00;}
-.badge-seek{background:#E8F0FE;color:#1A4DA0;}
+.badge-offer{background:#FFF3C4;color:#8A6B00;}.badge-seek{background:#E8F0FE;color:#1A4DA0;}
 .card-fac{font-size:.8rem;color:var(--muted);margin-bottom:.6rem;}
 .subjs{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.6rem;}
 .stag{padding:.22rem .6rem;border-radius:4px;font-size:.75rem;font-weight:600;background:#EEF3FF;color:var(--navy);}
@@ -109,102 +89,61 @@ nav{background:var(--navy);padding:0 5%;display:flex;align-items:center;justify-
 .price-val .per{font-family:'Epilogue',sans-serif;font-size:.72rem;color:var(--muted);font-weight:400;}
 .price-free{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:#1A7A4A;}
 .price-popt{font-size:.88rem;font-weight:600;color:var(--blue);}
-.btn-write{display:block;margin-top:.6rem;padding:.5rem 1rem;background:var(--navy);color:white;border:none;border-radius:6px;font-family:'Epilogue',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .2s;white-space:nowrap;}
+.btn-write{display:block;margin-top:.6rem;padding:.5rem 1rem;background:var(--navy);color:white;border:none;border-radius:6px;font-family:'Epilogue',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;}
 .btn-write:hover{background:var(--blue);}
 .empty-state{grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);}
-
-/* HOW IT WORKS */
 .how{background:var(--navy-dark);padding:5rem 5%;margin-top:4rem;}
 .how-in{max-width:1200px;margin:0 auto;}
 .how-label{display:inline-block;background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.3);color:var(--yellow);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:.3rem .9rem;border-radius:2rem;margin-bottom:1.25rem;}
 .how-h2{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:white;margin-bottom:3rem;}
 .how-h2 span{color:var(--yellow);}
 .how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;}
-.how-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:1.75rem;transition:background .2s;}
-.how-card:hover{background:rgba(255,255,255,.1);}
+.how-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:1.75rem;}
 .how-num{font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:var(--yellow);opacity:.6;line-height:1;margin-bottom:1rem;}
 .how-card-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:white;margin-bottom:.5rem;}
 .how-card-desc{font-size:.86rem;color:rgba(255,255,255,.55);line-height:1.6;}
-
-/* ========== MODAL ========== */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,20,50,.55);z-index:200;align-items:center;justify-content:center;padding:1.5rem;}
 .overlay.open{display:flex;}
 .modal{background:white;border-radius:16px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;padding:2.25rem;position:relative;animation:popIn .28s ease;}
 @keyframes popIn{from{transform:scale(.95) translateY(10px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
-.modal-x{position:absolute;top:1.1rem;right:1.1rem;background:var(--off);border:none;border-radius:50%;width:34px;height:34px;font-size:1rem;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all .15s;}
-.modal-x:hover{background:var(--border);color:var(--text);}
+.modal-x{position:absolute;top:1.1rem;right:1.1rem;background:var(--off);border:none;border-radius:50%;width:34px;height:34px;font-size:1rem;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center;}
+.modal-x:hover{background:var(--border);}
 .modal-badge{display:inline-block;background:var(--navy);color:var(--yellow);font-family:'Syne',sans-serif;font-weight:800;font-size:.75rem;padding:.2rem .5rem;border-radius:4px;margin-bottom:.5rem;}
 .modal-title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--navy);margin-bottom:.4rem;}
 .modal-sub{color:var(--muted);font-size:.88rem;margin-bottom:1.5rem;line-height:1.5;}
-
-/* Mode toggle */
 .mode-toggle{display:grid;grid-template-columns:1fr 1fr;background:var(--off);border-radius:8px;padding:4px;margin-bottom:1.5rem;gap:4px;}
-.mode-btn{padding:.65rem;border:none;border-radius:6px;font-family:'Epilogue',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;background:none;color:var(--muted);}
+.mode-btn{padding:.65rem;border:none;border-radius:6px;font-family:'Epilogue',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;background:none;color:var(--muted);}
 .mode-btn.active{background:white;color:var(--navy);box-shadow:0 1px 6px rgba(0,0,0,.1);}
-
-/* Form elements */
 .form-group{margin-bottom:1.1rem;}
 .form-label{display:block;font-size:.83rem;font-weight:600;color:var(--text);margin-bottom:.4rem;}
-.form-input,.form-select,.form-textarea{
-  width:100%;padding:.65rem .9rem;
-  border:1.5px solid var(--border);border-radius:8px;
-  font-family:'Epilogue',sans-serif;font-size:.9rem;
-  color:var(--text);background:var(--off);
-  outline:none;transition:border-color .2s;
-}
+.form-input,.form-select,.form-textarea{width:100%;padding:.65rem .9rem;border:1.5px solid var(--border);border-radius:8px;font-family:'Epilogue',sans-serif;font-size:.9rem;color:var(--text);background:var(--off);outline:none;}
 .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--navy);background:white;}
-.form-input.err,.form-select.err,.form-textarea.err{border-color:var(--red);background:var(--red-bg);}
+.form-input.err,.form-select.err{border-color:var(--red);background:var(--red-bg);}
 .form-textarea{resize:vertical;min-height:75px;}
 .row-2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
-
-/* Error message under field */
 .field-err{font-size:.76rem;color:var(--red);margin-top:.3rem;display:none;}
 .field-err.show{display:block;}
-
-/* Subjects textarea - simple approach */
 .form-hint{font-size:.74rem;color:var(--muted);margin-top:.3rem;}
-
-/* Price row */
 .price-row{display:flex;align-items:center;gap:.5rem;}
 .price-row .form-input{flex:1;}
 .free-lbl{display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:var(--muted);cursor:pointer;white-space:nowrap;}
-
-/* Submit */
-.btn-submit{width:100%;padding:.85rem;background:var(--navy);color:white;border:none;border-radius:8px;font-family:'Epilogue',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;margin-top:.75rem;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;}
-.btn-submit:hover:not(:disabled){background:var(--navy-mid);}
+.btn-submit{width:100%;padding:.85rem;background:var(--navy);color:white;border:none;border-radius:8px;font-family:'Epilogue',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;margin-top:.75rem;}
+.btn-submit:hover{background:var(--navy-mid);}
 .btn-submit:disabled{opacity:.65;cursor:not-allowed;}
-.btn-spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite;}
-
-/* Success */
 .success-panel{display:none;text-align:center;padding:2.5rem 1rem;}
 .success-icon{font-size:3.5rem;margin-bottom:1rem;}
 .success-panel h3{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--navy);margin-bottom:.5rem;}
 .success-panel p{color:var(--muted);font-size:.9rem;line-height:1.6;}
-
-/* TOAST */
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--navy);color:white;padding:.85rem 1.4rem;border-radius:8px;font-size:.88rem;font-weight:500;opacity:0;transform:translateY(8px);transition:all .25s;z-index:999;pointer-events:none;border-left:3px solid var(--yellow);max-width:300px;}
 .toast.show{opacity:1;transform:translateY(0);}
-
 footer{background:var(--navy-dark);border-top:1px solid rgba(255,255,255,.07);padding:2rem 5%;text-align:center;}
 footer p{font-size:.83rem;color:rgba(255,255,255,.3);}
 footer strong{color:rgba(255,255,255,.6);}
-
-@media(max-width:900px){
-  .hero-inner{grid-template-columns:1fr}
-  .hero-visual{display:none}
-  .hero h1{font-size:2.5rem}
-  .main{grid-template-columns:1fr}
-  .sidebar{position:static}
-  .how-grid{grid-template-columns:1fr 1fr}
-  .row-2{grid-template-columns:1fr}
-}
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr}.hero-visual{display:none}.hero h1{font-size:2.5rem}.main{grid-template-columns:1fr}.sidebar{position:static}.how-grid{grid-template-columns:1fr 1fr}.row-2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="logo">
     <div class="logo-badge">VŠE</div>
@@ -219,7 +158,6 @@ footer strong{color:rgba(255,255,255,.6);}
   </div>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
   <div class="hero-inner">
     <div>
@@ -231,7 +169,7 @@ footer strong{color:rgba(255,255,255,.6);}
         <button class="btn-hero-o" onclick="openModal(); setMode('seek')">Hledám tutora</button>
       </div>
       <div class="hero-stats">
-        <div class="stat"><div class="stat-n" id="heroCount">8</div><div class="stat-l">Aktivní nabídky</div></div>
+        <div class="stat"><div class="stat-n" id="heroCount">0</div><div class="stat-l">Aktivní nabídky</div></div>
         <div class="stat"><div class="stat-n">38</div><div class="stat-l">Předmětů</div></div>
         <div class="stat"><div class="stat-n">5 fakult</div><div class="stat-l">VŠE pokryto</div></div>
       </div>
@@ -239,26 +177,25 @@ footer strong{color:rgba(255,255,255,.6);}
     <div class="hero-visual">
       <div class="float-card">
         <div class="fc-top"><div class="fc-av">TN</div><div><div class="fc-name">Tomáš Novák</div><div class="fc-fac">FIS · 3. ročník</div></div></div>
-        <div class="fc-tags"><span class="fc-tag fc-teach">🎓 Matematika</span><span class="fc-tag fc-teach">🎓 Statistika</span><span class="fc-tag fc-teach">🎓 Python</span></div>
+        <div class="fc-tags"><span class="fc-tag fc-teach">🎓 Matematika</span><span class="fc-tag fc-teach">🎓 Statistika</span></div>
       </div>
       <div class="float-card">
         <div class="fc-top"><div class="fc-av" style="background:#1A6EC2">KH</div><div><div class="fc-name">Klára Horáková</div><div class="fc-fac">FFÚ · 2. ročník</div></div></div>
-        <div class="fc-tags"><span class="fc-tag fc-seek">📚 Hledám: Účetnictví</span><span class="fc-tag fc-seek">📚 Hledám: Makro</span></div>
+        <div class="fc-tags"><span class="fc-tag fc-seek">📚 Hledám: Účetnictví</span></div>
       </div>
       <div class="float-card">
         <div class="fc-top"><div class="fc-av" style="background:#C9A84C">MP</div><div><div class="fc-name">Martin Procházka</div><div class="fc-fac">FMV · 4. ročník</div></div></div>
-        <div class="fc-tags"><span class="fc-tag fc-teach">🎓 Mezinárodní právo</span><span class="fc-tag fc-teach">🎓 Němčina B2</span></div>
+        <div class="fc-tags"><span class="fc-tag fc-teach">🎓 Mezinárodní právo</span></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SEARCH BAR -->
 <div class="search-bar">
   <div class="search-inner">
     <div class="search-wrap">
       <span class="ico">🔍</span>
-      <input class="search-input" id="searchInput" type="text" placeholder="Hledej předmět, jméno nebo téma…">
+      <input class="search-input" id="searchInput" type="text" placeholder="Hledej předmět, jméno nebo téma…" oninput="renderListings()">
     </div>
     <div class="pills">
       <button class="pill active" onclick="setPill(this,'all')">Vše</button>
@@ -268,7 +205,6 @@ footer strong{color:rgba(255,255,255,.6);}
   </div>
 </div>
 
-<!-- MAIN -->
 <div class="main" id="listings">
   <aside class="sidebar">
     <div class="sb-box">
@@ -285,23 +221,22 @@ footer strong{color:rgba(255,255,255,.6);}
     <div class="sb-box">
       <div class="sb-title">Předměty</div>
       <ul class="subj-list" id="subjList">
-        <li class="subj-item active" onclick="filterSubject(this,'all')">Všechny <span class="subj-count" id="cntAll">8</span></li>
-        <li class="subj-item" onclick="filterSubject(this,'Matematika')">Matematika <span class="subj-count">—</span></li>
-        <li class="subj-item" onclick="filterSubject(this,'Statistika')">Statistika <span class="subj-count">—</span></li>
-        <li class="subj-item" onclick="filterSubject(this,'Účetnictví')">Účetnictví <span class="subj-count">—</span></li>
-        <li class="subj-item" onclick="filterSubject(this,'Ekonometrie')">Ekonometrie <span class="subj-count">—</span></li>
-        <li class="subj-item" onclick="filterSubject(this,'Excel')">Excel / Data <span class="subj-count">—</span></li>
-        <li class="subj-item" onclick="filterSubject(this,'Právo')">Právo <span class="subj-count">—</span></li>
-        <li class="subj-item" onclick="filterSubject(this,'Makroekonomie')">Makroekonomie <span class="subj-count">—</span></li>
-        <li class="subj-item" onclick="filterSubject(this,'Angličtina')">Jazyky <span class="subj-count">—</span></li>
+        <li class="subj-item active" onclick="filterSubject(this,'all')">Všechny <span class="subj-count" id="cntAll">0</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Matematika')">Matematika <span class="subj-count">0</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Statistika')">Statistika <span class="subj-count">0</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Účetnictví')">Účetnictví <span class="subj-count">0</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Ekonometrie')">Ekonometrie <span class="subj-count">0</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Excel')">Excel / Data <span class="subj-count">0</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Právo')">Právo <span class="subj-count">0</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Makroekonomie')">Makroekonomie <span class="subj-count">0</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Angličtina')">Jazyky <span class="subj-count">0</span></li>
       </ul>
     </div>
     <button class="btn-yellow" style="width:100%;padding:.75rem;font-size:.92rem;border-radius:8px;" onclick="openModal()">+ Přidat svou nabídku</button>
   </aside>
-
   <div>
     <div class="lh">
-      <div class="lh-count" id="listCount">Zobrazeno <strong>8</strong> inzerátů</div>
+      <div class="lh-count" id="listCount">Načítám…</div>
       <select class="sort-sel" id="sortSel" onchange="renderListings()">
         <option value="new">Nejnovější</option>
         <option value="price-asc">Cena: od nejnižší</option>
@@ -309,43 +244,36 @@ footer strong{color:rgba(255,255,255,.6);}
         <option value="free">Nejdříve zdarma</option>
       </select>
     </div>
-    <div class="grid" id="listGrid"></div>
+    <div class="grid" id="listGrid"><div class="empty-state">Načítám inzeráty…</div></div>
   </div>
 </div>
 
-<!-- HOW IT WORKS -->
 <div class="how" id="how">
   <div class="how-in">
     <div class="how-label">Jak to funguje</div>
     <h2 class="how-h2">Jednoduchý proces,<br><span>skutečné výsledky</span></h2>
     <div class="how-grid">
-      <div class="how-card"><div class="how-num">01</div><div class="how-card-title">Přidej inzerát</div><div class="how-card-desc">Zvládáš Statistiku nebo Účetnictví? Nebo potřebuješ pomoc? Přidej inzerát za minutu.</div></div>
-      <div class="how-card"><div class="how-num">02</div><div class="how-card-title">Procházej nabídky</div><div class="how-card-desc">Filtruj podle fakulty, předmětu nebo ceny. Najdi spolužáka, který přesně ví, co potřebuješ.</div></div>
-      <div class="how-card"><div class="how-num">03</div><div class="how-card-title">Ozvi se přes email</div><div class="how-card-desc">Kontaktuj tutora přímo přes školní email. Žádný prostředník, žádné poplatky.</div></div>
-      <div class="how-card"><div class="how-num">04</div><div class="how-card-title">Uč se od studentů</div><div class="how-card-desc">Spolužák ví, jak profesor zkoušky pojímá. To je nejcennější pomoc.</div></div>
+      <div class="how-card"><div class="how-num">01</div><div class="how-card-title">Přidej inzerát</div><div class="how-card-desc">Zvládáš Statistiku? Nebo potřebuješ pomoc? Přidej inzerát za minutu.</div></div>
+      <div class="how-card"><div class="how-num">02</div><div class="how-card-title">Procházej nabídky</div><div class="how-card-desc">Filtruj podle fakulty, předmětu nebo ceny a najdi toho pravého.</div></div>
+      <div class="how-card"><div class="how-num">03</div><div class="how-card-title">Ozvi se přes email</div><div class="how-card-desc">Kontaktuj studenta přímo na školní email. Žádné poplatky.</div></div>
+      <div class="how-card"><div class="how-num">04</div><div class="how-card-title">Uč se od studentů</div><div class="how-card-desc">Spolužák ví, jak profesor zkoušky pojímá — to je nejcennější pomoc.</div></div>
     </div>
   </div>
 </div>
+<footer><p><strong>VŠE TutoringHub</strong> — platforma pro studenty Vysoké školy ekonomické v Praze</p></footer>
 
-<footer><p><strong>VŠE TutoringHub</strong> — platforma pro studenty Vysoké školy ekonomické v Praze · Pouze pro @vse.cz emaily</p></footer>
-
-<!-- ========== MODAL ========== -->
+<!-- MODAL -->
 <div class="overlay" id="mainModal">
   <div class="modal">
     <button class="modal-x" onclick="closeModal()">✕</button>
-
     <div id="modalForm">
       <div class="modal-badge">VŠE</div>
       <div class="modal-title">Přidat inzerát</div>
-      <p class="modal-sub">Vyplň níže a tvůj inzerát se okamžitě zobrazí ostatním studentům.</p>
-
-      <!-- Mode toggle -->
+      <p class="modal-sub">Vyplň níže a inzerát se okamžitě zobrazí ostatním studentům.</p>
       <div class="mode-toggle">
         <button class="mode-btn active" id="modeOffer" onclick="setMode('offer')">🎓 Nabízím tutoring</button>
         <button class="mode-btn" id="modeSeek" onclick="setMode('seek')">📚 Hledám tutora</button>
       </div>
-
-      <!-- Jméno + Email -->
       <div class="row-2">
         <div class="form-group">
           <label class="form-label">Jméno a příjmení *</label>
@@ -358,8 +286,6 @@ footer strong{color:rgba(255,255,255,.6);}
           <div class="field-err" id="errEmail">Zadej @vse.cz email.</div>
         </div>
       </div>
-
-      <!-- Fakulta + Ročník -->
       <div class="row-2">
         <div class="form-group">
           <label class="form-label">Fakulta *</label>
@@ -386,39 +312,26 @@ footer strong{color:rgba(255,255,255,.6);}
           <div class="field-err" id="errYear">Vyber prosím ročník.</div>
         </div>
       </div>
-
-      <!-- Předměty — prostý textarea, žádný tag input -->
       <div class="form-group">
         <label class="form-label" id="subjLabel">Předměty, které učím *</label>
         <input class="form-input" id="inpSubjects" type="text" placeholder="např. Matematika, Statistika, Excel">
-        <div class="form-hint">Odděl předměty čárkou. Stačí napsat a kliknout Zveřejnit.</div>
+        <div class="form-hint">Odděl předměty čárkou.</div>
         <div class="field-err" id="errSubjects">Zadej alespoň jeden předmět.</div>
       </div>
-
-      <!-- Popis -->
       <div class="form-group">
         <label class="form-label">Popis</label>
         <textarea class="form-textarea" id="inpDesc" placeholder="Krátce popiš, co nabízíš nebo co hledáš…"></textarea>
       </div>
-
-      <!-- Cena (jen pro tutory) -->
       <div class="form-group" id="priceGrp">
         <label class="form-label">Cena za hodinu</label>
         <div class="price-row">
           <input class="form-input" id="inpPrice" type="number" min="0" placeholder="např. 200">
           <span style="color:var(--muted);font-size:.9rem;white-space:nowrap">Kč / hod</span>
-          <label class="free-lbl">
-            <input type="checkbox" id="freeChk" onchange="toggleFree()">
-            Zdarma
-          </label>
+          <label class="free-lbl"><input type="checkbox" id="freeChk" onchange="toggleFree()"> Zdarma</label>
         </div>
-        <div class="form-hint">Nechej prázdné, pokud cenu zatím neuvádíš.</div>
       </div>
-
       <button class="btn-submit" id="submitBtn" onclick="submitListing()">Zveřejnit inzerát →</button>
     </div>
-
-    <!-- Success state -->
     <div class="success-panel" id="successPanel">
       <div class="success-icon">🎉</div>
       <h3>Inzerát přidán!</h3>
@@ -429,323 +342,272 @@ footer strong{color:rgba(255,255,255,.6);}
 
 <div class="toast" id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
+// ================================================================
+//  DOPLŇ SVOJE SUPABASE KLÍČE ZDE:
+// ================================================================
+var SUPABASE_URL = 'https://oppslcsfrflbaynfefni.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wcHNsY3NmcmZsYmF5bmZlZm5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NTc0NTIsImV4cCI6MjA4OTQzMzQ1Mn0.mW9lwmZDlqppeO6irY9RD--mc6H9pVnOAC5pGhyEyaE';
+// ================================================================
 
+var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ─── CONSTANTS ──────────────────────────────────────────────────
-const COLORS = ['#003366','#1A6EC2','#C9A84C','#2C5545','#8B3A3A','#5B3F9A','#1A7A4A','#8A6B00'];
-let ALL_LISTINGS = [];   // živá kopie z DB
-let filterMode   = 'all';
-let activeSubj   = 'all';
-let currentMode  = 'offer';
+var COLORS = ['#003366','#1A6EC2','#C9A84C','#2C5545','#8B3A3A','#5B3F9A','#1A7A4A','#8A6B00'];
+var ALL = [];
+var filterMode = 'all';
+var activeSubj = 'all';
+var currentMode = 'offer';
 
-// ─── HELPERS ────────────────────────────────────────────────────
-function getColor(n){ let h=0; for(let c of n) h+=c.charCodeAt(0); return COLORS[h%COLORS.length]; }
-function initials(n){ return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
+function getColor(n){var h=0;for(var i=0;i<n.length;i++)h+=n.charCodeAt(i);return COLORS[h%COLORS.length];}
+function initials(n){return n.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();}
 
-function showToast(msg, err=false){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.borderLeftColor = err ? '#D93025' : 'var(--yellow)';
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3500);
+  setTimeout(function(){t.classList.remove('show');},3000);
 }
 
 function priceHTML(l){
   if(l.type==='seek') return '<div class="price-popt">Poptávka</div>';
-  if(l.free)          return '<div class="price-free">Zdarma</div>';
-  if(l.price)         return `<div class="price-val">${l.price} <span class="per">Kč/h</span></div>`;
+  if(l.free) return '<div class="price-free">Zdarma</div>';
+  if(l.price) return '<div class="price-val">'+l.price+' <span class="per">Kč/h</span></div>';
   return '<div class="price-popt" style="color:var(--muted)">Cena dohodou</div>';
 }
 
-// ─── NAČTENÍ Z DATABÁZE ─────────────────────────────────────────
-async function loadListings(){
-  setLoadingState(true);
-
-  // Pokud klíče nejsou nastaveny — použij demo data
-  if(SUPABASE_URL === 'TVUJ_SUPABASE_URL'){
-    ALL_LISTINGS = DEMO_LISTINGS;
-    renderListings();
-    setLoadingState(false);
-    return;
-  }
-
-  const { data, error } = await sb
-    .from('listings')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if(error){
-    console.error('Supabase load error:', error);
-    showToast('Nepodařilo se načíst inzeráty ze serveru.', true);
-    ALL_LISTINGS = DEMO_LISTINGS;
-  } else {
-    // Převed subjects z CSV stringu zpět na pole
-    ALL_LISTINGS = data.map(r => ({
-      ...r,
-      subjects: r.subjects ? r.subjects.split(',').map(s=>s.trim()) : [],
-      desc: r.description || 'Bez popisu.',
-    }));
-  }
-  renderListings();
-  setLoadingState(false);
-}
-
-function setLoadingState(loading){
-  const grid = document.getElementById('listGrid');
-  if(loading){
-    grid.innerHTML = `
-      <div class="empty-state" style="display:flex;flex-direction:column;align-items:center;gap:1rem;">
-        <div class="loading-spinner"></div>
-        <p>Načítám inzeráty…</p>
-      </div>`;
-  }
-}
-
-// ─── RENDER ─────────────────────────────────────────────────────
 function renderListings(){
-  const search = document.getElementById('searchInput').value.toLowerCase();
-  const fac    = document.getElementById('facFilter').value;
-  const sort   = document.getElementById('sortSel').value;
+  var search = document.getElementById('searchInput').value.toLowerCase();
+  var fac = document.getElementById('facFilter').value;
+  var sort = document.getElementById('sortSel').value;
+  var data = ALL.slice();
 
-  let data = [...ALL_LISTINGS];
-  if(filterMode !== 'all') data = data.filter(l => l.type === filterMode);
-  if(activeSubj !== 'all') data = data.filter(l =>
-    Array.isArray(l.subjects) && l.subjects.some(s => s.toLowerCase().includes(activeSubj.toLowerCase()))
-  );
-  if(fac !== 'all') data = data.filter(l => l.faculty === fac);
-  if(search) data = data.filter(l =>
-    l.name.toLowerCase().includes(search) ||
-    (Array.isArray(l.subjects) && l.subjects.some(s => s.toLowerCase().includes(search))) ||
-    (l.desc||'').toLowerCase().includes(search)
-  );
+  if(filterMode!=='all') data=data.filter(function(l){return l.type===filterMode;});
+  if(activeSubj!=='all') data=data.filter(function(l){return l.subjects.some(function(s){return s.toLowerCase().indexOf(activeSubj.toLowerCase())>=0;});});
+  if(fac!=='all') data=data.filter(function(l){return l.faculty===fac;});
+  if(search) data=data.filter(function(l){
+    return l.name.toLowerCase().indexOf(search)>=0 ||
+      l.subjects.some(function(s){return s.toLowerCase().indexOf(search)>=0;}) ||
+      (l.desc||'').toLowerCase().indexOf(search)>=0;
+  });
 
-  if(sort==='price-asc')   data.sort((a,b)=>(a.free?0:a.price||999)-(b.free?0:b.price||999));
-  else if(sort==='price-desc') data.sort((a,b)=>(b.price||0)-(a.price||0));
-  else if(sort==='free')   data.sort((a,b)=>(b.free?1:0)-(a.free?1:0));
-  else data.sort((a,b)=> new Date(b.created_at||0) - new Date(a.created_at||0));
+  if(sort==='price-asc') data.sort(function(a,b){return (a.free?0:a.price||999)-(b.free?0:b.price||999);});
+  else if(sort==='price-desc') data.sort(function(a,b){return (b.price||0)-(a.price||0);});
+  else if(sort==='free') data.sort(function(a,b){return (b.free?1:0)-(a.free?1:0);});
 
-  document.getElementById('heroCount').textContent = ALL_LISTINGS.length;
-
-  const grid = document.getElementById('listGrid');
-  const cnt  = document.getElementById('listCount');
+  document.getElementById('heroCount').textContent = ALL.length;
+  var grid = document.getElementById('listGrid');
+  var cnt = document.getElementById('listCount');
 
   if(!data.length){
-    grid.innerHTML = `<div class="empty-state">🔎 Žádné inzeráty nenalezeny. Zkus jiný filtr nebo <strong onclick="openModal()" style="cursor:pointer;color:var(--navy)">přidej první nabídku</strong>.</div>`;
-    cnt.innerHTML  = '0 inzerátů';
-    updateSidebarCounts();
+    grid.innerHTML='<div class="empty-state">🔎 Žádné inzeráty. Buď první!</div>';
+    cnt.innerHTML='0 inzerátů';
+    updateCounts();
     return;
   }
 
-  cnt.innerHTML = `Zobrazeno <strong>${data.length}</strong> inzerátů`;
-  grid.innerHTML = data.map(l => {
-    const subjectsArr = Array.isArray(l.subjects) ? l.subjects : [];
-    return `
-    <div class="card ${l.type==='seek'?'seeking':'offering'}">
-      <div class="av" style="background:${getColor(l.name)}">${initials(l.name)}</div>
-      <div>
-        <div class="card-top">
-          <span class="card-name">${l.name}</span>
-          <span class="type-badge ${l.type==='offer'?'badge-offer':'badge-seek'}">${l.type==='offer'?'🎓 Nabízí':'📚 Hledá'}</span>
-        </div>
-        <div class="card-fac">${l.faculty} · ${l.year}</div>
-        <div class="subjs">${subjectsArr.map(s=>`<span class="stag">${s}</span>`).join('')}</div>
-        <div class="card-desc">${l.desc||''}</div>
-      </div>
-      <div class="card-side">
-        ${priceHTML(l)}
-        <button class="btn-write" onclick="event.stopPropagation(); window.location.href='mailto:${l.email}?subject=VŠE%20TutoringHub%20–%20Zájem%20o%20spolupráci'">Napsat</button>
-      </div>
-    </div>`;
+  cnt.innerHTML='Zobrazeno <strong>'+data.length+'</strong> inzerátů';
+  grid.innerHTML=data.map(function(l){
+    var subjs=l.subjects.map(function(s){return '<span class="stag">'+s+'</span>';}).join('');
+    var mailto='mailto:'+l.email+'?subject=VŠE%20TutoringHub%20–%20Zájem%20o%20spolupráci';
+    return '<div class="card '+(l.type==='seek'?'seeking':'offering')+'">'
+      +'<div class="av" style="background:'+getColor(l.name)+'">'+initials(l.name)+'</div>'
+      +'<div>'
+        +'<div class="card-top"><span class="card-name">'+l.name+'</span>'
+        +'<span class="type-badge '+(l.type==='offer'?'badge-offer':'badge-seek')+'">'+(l.type==='offer'?'🎓 Nabízí':'📚 Hledá')+'</span></div>'
+        +'<div class="card-fac">'+l.faculty+' · '+l.year+'</div>'
+        +'<div class="subjs">'+subjs+'</div>'
+        +'<div class="card-desc">'+(l.desc||'')+'</div>'
+      +'</div>'
+      +'<div class="card-side">'+priceHTML(l)
+        +'<button class="btn-write" onclick="window.location.href=\''+mailto+'\'">Napsat</button>'
+      +'</div>'
+    +'</div>';
   }).join('');
-
-  updateSidebarCounts();
+  updateCounts();
 }
 
-function updateSidebarCounts(){
-  document.getElementById('cntAll').textContent = ALL_LISTINGS.length;
-  document.querySelectorAll('#subjList .subj-item:not(:first-child)').forEach(li => {
-    const key = li.textContent.trim().split('\n')[0].trim().replace(/\s.*$/,'');
-    const c = ALL_LISTINGS.filter(l =>
-      Array.isArray(l.subjects) && l.subjects.some(s => s.toLowerCase().includes(key.toLowerCase()))
-    ).length;
-    li.querySelector('.subj-count').textContent = c || '0';
-  });
+function updateCounts(){
+  document.getElementById('cntAll').textContent=ALL.length;
+  var items=document.querySelectorAll('#subjList .subj-item:not(:first-child)');
+  for(var i=0;i<items.length;i++){
+    var key=items[i].textContent.trim().split('\n')[0].trim().replace(/\s.*/,'');
+    var c=ALL.filter(function(l){return l.subjects.some(function(s){return s.toLowerCase().indexOf(key.toLowerCase())>=0;});}).length;
+    items[i].querySelector('.subj-count').textContent=c||'0';
+  }
 }
 
-// ─── FILTRY ─────────────────────────────────────────────────────
-function setPill(btn, mode){
-  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+function setPill(btn,mode){
+  var pills=document.querySelectorAll('.pill');
+  for(var i=0;i<pills.length;i++) pills[i].classList.remove('active');
   btn.classList.add('active');
-  filterMode = (mode==='offer') ? 'offer' : (mode==='seek') ? 'seek' : 'all';
+  filterMode=mode;
   renderListings();
-};
+}
 
-function filterSubject(el, s){
-  document.querySelectorAll('.subj-item').forEach(i=>i.classList.remove('active'));
+function filterSubject(el,s){
+  var items=document.querySelectorAll('.subj-item');
+  for(var i=0;i<items.length;i++) items[i].classList.remove('active');
   el.classList.add('active');
-  activeSubj = s;
+  activeSubj=s;
   renderListings();
-};
+}
 
-document.getElementById('searchInput').addEventListener('input', renderListings);
-document.getElementById('facFilter').addEventListener('change', renderListings);
-document.getElementById('sortSel').addEventListener('change', renderListings);
-
-// ─── MODAL ──────────────────────────────────────────────────────
 function openModal(){
   document.getElementById('mainModal').classList.add('open');
-};
+}
 
 function closeModal(){
   document.getElementById('mainModal').classList.remove('open');
-  document.getElementById('modalForm').style.display    = 'block';
-  document.getElementById('successPanel').style.display = 'none';
-  document.getElementById('inpName').value     = '';
-  document.getElementById('inpEmail').value    = '';
-  document.getElementById('inpFac').value      = '';
-  document.getElementById('inpYear').value     = '';
-  document.getElementById('inpSubjects').value = '';
-  document.getElementById('inpDesc').value     = '';
-  document.getElementById('inpPrice').value    = '';
-  document.getElementById('freeChk').checked   = false;
-  document.getElementById('inpPrice').disabled = false;
-  document.getElementById('submitBtn').disabled = false;
-  document.getElementById('submitBtn').textContent = 'Zveřejnit inzerát →';
-  clearAllErrors();
-};
+  document.getElementById('modalForm').style.display='block';
+  document.getElementById('successPanel').style.display='none';
+  document.getElementById('inpName').value='';
+  document.getElementById('inpEmail').value='';
+  document.getElementById('inpFac').value='';
+  document.getElementById('inpYear').value='';
+  document.getElementById('inpSubjects').value='';
+  document.getElementById('inpDesc').value='';
+  document.getElementById('inpPrice').value='';
+  document.getElementById('freeChk').checked=false;
+  document.getElementById('inpPrice').disabled=false;
+  document.getElementById('submitBtn').disabled=false;
+  document.getElementById('submitBtn').textContent='Zveřejnit inzerát →';
+  var errs=document.querySelectorAll('.field-err');
+  for(var i=0;i<errs.length;i++) errs[i].classList.remove('show');
+  var inputs=document.querySelectorAll('.form-input,.form-select');
+  for(var i=0;i<inputs.length;i++) inputs[i].classList.remove('err');
+}
 
-document.getElementById('mainModal').addEventListener('click', e => {
-  if(e.target === document.getElementById('mainModal')) closeModal();
-});
+document.getElementById('mainModal').onclick=function(e){
+  if(e.target===document.getElementById('mainModal')) closeModal();
+};
 
 function setMode(m){
-  currentMode = m;
-  document.getElementById('modeOffer').classList.toggle('active', m==='offer');
-  document.getElementById('modeSeek').classList.toggle('active',  m==='seek');
-  document.getElementById('subjLabel').textContent = m==='offer' ? 'Předměty, které učím *' : 'Předměty, se kterými potřebuji pomoc *';
-  document.getElementById('priceGrp').style.display = m==='offer' ? 'block' : 'none';
-};
+  currentMode=m;
+  document.getElementById('modeOffer').classList.toggle('active',m==='offer');
+  document.getElementById('modeSeek').classList.toggle('active',m==='seek');
+  document.getElementById('subjLabel').textContent=m==='offer'?'Předměty, které učím *':'Předměty, se kterými potřebuji pomoc *';
+  document.getElementById('priceGrp').style.display=m==='offer'?'block':'none';
+}
 
 function toggleFree(){
-  const c = document.getElementById('freeChk').checked;
-  document.getElementById('inpPrice').disabled = c;
-  if(c) document.getElementById('inpPrice').value = '';
-};
-
-// ─── VALIDACE ───────────────────────────────────────────────────
-function setErr(fieldId, errId){
-  document.getElementById(fieldId).classList.add('err');
-  document.getElementById(errId).classList.add('show');
+  var c=document.getElementById('freeChk').checked;
+  document.getElementById('inpPrice').disabled=c;
+  if(c) document.getElementById('inpPrice').value='';
 }
-function clearAllErrors(){
-  document.querySelectorAll('.field-err').forEach(e=>e.classList.remove('show'));
-  document.querySelectorAll('.form-input,.form-select').forEach(e=>e.classList.remove('err'));
-}
-function clearErr(fieldId){
-  document.getElementById(fieldId).classList.remove('err');
-};
 
-// ─── ULOŽENÍ DO DATABÁZE ────────────────────────────────────────
-async function submitListing(){
-  clearAllErrors();
+function submitListing(){
+  // clear errors
+  var errs=document.querySelectorAll('.field-err');
+  for(var i=0;i<errs.length;i++) errs[i].classList.remove('show');
+  var inputs=document.querySelectorAll('.form-input,.form-select');
+  for(var i=0;i<inputs.length;i++) inputs[i].classList.remove('err');
 
-  const name     = document.getElementById('inpName').value.trim();
-  const email    = document.getElementById('inpEmail').value.trim();
-  const fac      = document.getElementById('inpFac').value;
-  const year     = document.getElementById('inpYear').value;
-  const subjRaw  = document.getElementById('inpSubjects').value.trim();
-  const desc     = document.getElementById('inpDesc').value.trim();
-  const isFree   = document.getElementById('freeChk').checked;
-  const priceRaw = document.getElementById('inpPrice').value;
+  var name=document.getElementById('inpName').value.trim();
+  var email=document.getElementById('inpEmail').value.trim();
+  var fac=document.getElementById('inpFac').value;
+  var year=document.getElementById('inpYear').value;
+  var subjRaw=document.getElementById('inpSubjects').value.trim();
+  var desc=document.getElementById('inpDesc').value.trim();
+  var isFree=document.getElementById('freeChk').checked;
+  var priceRaw=document.getElementById('inpPrice').value;
 
-  let valid = true;
-  if(!name)                                                         { setErr('inpName','errName');       valid=false; }
-  if(!email||(!email.includes('@vse.cz')&&!email.includes('@student.vse.cz'))) { setErr('inpEmail','errEmail'); valid=false; }
-  if(!fac)                                                          { setErr('inpFac','errFac');         valid=false; }
-  if(!year)                                                         { setErr('inpYear','errYear');       valid=false; }
-  if(!subjRaw)                                                      { setErr('inpSubjects','errSubjects');valid=false; }
+  var valid=true;
+  if(!name){document.getElementById('inpName').classList.add('err');document.getElementById('errName').classList.add('show');valid=false;}
+  if(!email||email.indexOf('@vse.cz')<0){document.getElementById('inpEmail').classList.add('err');document.getElementById('errEmail').classList.add('show');valid=false;}
+  if(!fac){document.getElementById('inpFac').classList.add('err');document.getElementById('errFac').classList.add('show');valid=false;}
+  if(!year){document.getElementById('inpYear').classList.add('err');document.getElementById('errYear').classList.add('show');valid=false;}
+  if(!subjRaw){document.getElementById('inpSubjects').classList.add('err');document.getElementById('errSubjects').classList.add('show');valid=false;}
   if(!valid) return;
 
-  const subjects  = subjRaw.split(',').map(s=>s.trim()).filter(Boolean);
-  const priceVal  = isFree ? 0 : (priceRaw ? parseInt(priceRaw) : null);
+  var subjects=subjRaw.split(',').map(function(s){return s.trim();}).filter(function(s){return s.length>0;});
+  var priceVal=isFree?0:(priceRaw?parseInt(priceRaw):null);
 
-  const btn = document.getElementById('submitBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="btn-spinner"></span> Ukládám…';
+  var btn=document.getElementById('submitBtn');
+  btn.disabled=true;
+  btn.textContent='Ukládám…';
 
-  const row = {
-    name,
-    email,
-    faculty:     fac,
-    year,
-    type:        currentMode === 'offer' ? 'offer' : 'seek',
-    subjects:    subjects.join(', '),   // uložíme jako CSV string
-    description: desc || null,
-    price:       priceVal,
-    free:        isFree,
+  var row={
+    name:name, email:email, faculty:fac, year:year,
+    type:currentMode==='offer'?'offer':'seek',
+    subjects:subjects.join(', '),
+    description:desc||null,
+    price:priceVal, free:isFree
   };
 
-  // Pokud DB není nastavena — ulož jen lokálně
-  if(SUPABASE_URL === 'TVUJ_SUPABASE_URL'){
-    ALL_LISTINGS.unshift({ ...row, id: Date.now(), created_at: new Date().toISOString(), subjects, desc: row.description||'Bez popisu.' });
+  // Pokud klíče nejsou nastaveny — ulož jen lokálně
+  if(SUPABASE_URL==='TVUJ_SUPABASE_URL'){
+    ALL.unshift({id:Date.now(),created_at:new Date().toISOString(),
+      name:name,email:email,faculty:fac,year:year,
+      type:currentMode==='offer'?'offer':'seek',
+      subjects:subjects,desc:desc||'Bez popisu.',price:priceVal,free:isFree});
     renderListings();
-    showSuccess(name);
+    showSuccessPanel(name);
     return;
   }
 
-  const { data, error } = await sb.from('listings').insert([row]).select().single();
-
-  if(error){
-    console.error('Supabase insert error:', error);
-    btn.disabled = false;
-    btn.textContent = 'Zveřejnit inzerát →';
-    showToast('Chyba při ukládání. Zkus to znovu.', true);
-    return;
-  }
-
-  // Přidej nový záznam lokálně bez reload
-  ALL_LISTINGS.unshift({
-    ...data,
-    subjects,
-    desc: data.description || 'Bez popisu.',
+  sb.from('listings').insert([row]).select().then(function(result){
+    if(result.error){
+      console.error(result.error);
+      btn.disabled=false;
+      btn.textContent='Zveřejnit inzerát →';
+      showToast('Chyba při ukládání: '+result.error.message);
+      return;
+    }
+    var d=result.data[0];
+    ALL.unshift({id:d.id,created_at:d.created_at,
+      name:d.name,email:d.email,faculty:d.faculty,year:d.year,
+      type:d.type,subjects:subjects,
+      desc:d.description||'Bez popisu.',price:d.price,free:d.free});
+    renderListings();
+    showSuccessPanel(name);
   });
-  renderListings();
-  showSuccess(name);
-};
-
-function showSuccess(name){
-  document.getElementById('modalForm').style.display    = 'none';
-  document.getElementById('successPanel').style.display = 'block';
-  setTimeout(() => {
-    closeModal();
-    showToast(`Inzerát od ${name} byl přidán! 🎓`);
-  }, 2500);
 }
 
-// ─── DEMO DATA (zobrazí se když nejsou nastaveny klíče) ─────────
-const DEMO_LISTINGS = [
-  {id:1,created_at:'2025-01-01',name:'Tomáš Novák',    faculty:'FIS',year:'3. ročník Bc.', type:'offer',subjects:['Matematika','Statistika','Python'],          desc:'Zvládl jsem Matematiku A i B s áčkem. Pomůžu s příklady, zkouškami i pochopením látky.',price:200, free:false,email:'xnovt10@vse.cz'},
-  {id:2,created_at:'2025-01-02',name:'Klára Horáková', faculty:'FFÚ',year:'2. ročník Bc.', type:'seek', subjects:['Účetnictví','Makroekonomie'],                 desc:'Potřebuji pomoc s Účetnictvím 2 a základy makro.',                                      price:null,free:false,email:'xhork20@vse.cz'},
-  {id:3,created_at:'2025-01-03',name:'Martin Procházka',faculty:'FMV',year:'4. ročník Bc.',type:'offer',subjects:['Mezinárodní právo','Němčina'],                desc:'Lektoruji právo pro FMV a pomáhám s němčinou (B2). Flexibilní časy.',                  price:250, free:false,email:'xprom30@vse.cz'},
-  {id:4,created_at:'2025-01-04',name:'Adéla Svobodová',faculty:'FPH',year:'1. ročník Ing.',type:'offer',subjects:['Excel','Statistika','R'],                    desc:'Pomůžu s datovou analýzou, Excelem i R. Pracuji jako analytik na brigádě.',            price:0,   free:true, email:'xsvoa01@vse.cz'},
-  {id:5,created_at:'2025-01-05',name:'Ondřej Blažek',  faculty:'NF', year:'2. ročník Bc.', type:'seek', subjects:['Ekonometrie','Matematika'],                  desc:'Zápasím s Ekonometrií. Potřebuji vysvětlit regresi a časové řady.',                     price:null,free:false,email:'xblao50@vse.cz'},
-  {id:6,created_at:'2025-01-06',name:'Lucie Kratochvílová',faculty:'FFÚ',year:'3. ročník Bc.',type:'offer',subjects:['Účetnictví','Finanční analýza','Daně'],    desc:'Účetnictví 1, 2 i 3 za sebou s výbornými výsledky.',                                    price:180, free:false,email:'xkral60@vse.cz'},
-  {id:7,created_at:'2025-01-07',name:'Pavel Hájek',    faculty:'FIS',year:'2. ročník Ing.',type:'offer',subjects:['SQL','Python','Datové modelování'],           desc:'Pracuji jako data engineer a rád předám zkušenosti.',                                   price:300, free:false,email:'xhajp07@vse.cz'},
-  {id:8,created_at:'2025-01-08',name:'Eva Nováková',   faculty:'FMV',year:'3. ročník Bc.', type:'seek', subjects:['Angličtina','Španělština'],                   desc:'Hledám konverzačního partnera pro zlepšení španělštiny.',                               price:null,free:false,email:'xnovae08@vse.cz'},
-];
+function showSuccessPanel(name){
+  document.getElementById('modalForm').style.display='none';
+  document.getElementById('successPanel').style.display='block';
+  setTimeout(function(){closeModal();showToast('Inzerát od '+name+' přidán! 🎓');},2500);
+}
 
-// ─── INIT ───────────────────────────────────────────────────────
+// Načti z databáze
+function loadListings(){
+  if(SUPABASE_URL==='TVUJ_SUPABASE_URL'){
+    // Demo data
+    ALL=[
+      {id:1,name:'Tomáš Novák',faculty:'FIS',year:'3. ročník Bc.',type:'offer',subjects:['Matematika','Statistika','Python'],desc:'Zvládl jsem Matematiku A i B s áčkem. Pomůžu s příklady a zkouškami.',price:200,free:false,email:'xnovt10@vse.cz'},
+      {id:2,name:'Klára Horáková',faculty:'FFÚ',year:'2. ročník Bc.',type:'seek',subjects:['Účetnictví','Makroekonomie'],desc:'Potřebuji pomoc s Účetnictvím 2 a základy makro.',price:null,free:false,email:'xhork20@vse.cz'},
+      {id:3,name:'Martin Procházka',faculty:'FMV',year:'4. ročník Bc.',type:'offer',subjects:['Mezinárodní právo','Němčina'],desc:'Lektoruji právo pro FMV, němčina B2. Flexibilní časy.',price:250,free:false,email:'xprom30@vse.cz'},
+      {id:4,name:'Adéla Svobodová',faculty:'FPH',year:'1. ročník Ing.',type:'offer',subjects:['Excel','Statistika','R'],desc:'Pomůžu s datovou analýzou a Excelem. Analytik na brigádě.',price:0,free:true,email:'xsvoa01@vse.cz'},
+      {id:5,name:'Ondřej Blažek',faculty:'NF',year:'2. ročník Bc.',type:'seek',subjects:['Ekonometrie','Matematika'],desc:'Potřebuji pomoc s Ekonometrií — regrese a časové řady.',price:null,free:false,email:'xblao50@vse.cz'},
+      {id:6,name:'Lucie Kratochvílová',faculty:'FFÚ',year:'3. ročník Bc.',type:'offer',subjects:['Účetnictví','Finanční analýza','Daně'],desc:'Účetnictví 1–3 za sebou s výbornými výsledky.',price:180,free:false,email:'xkral60@vse.cz'},
+    ];
+    renderListings();
+    return;
+  }
+
+  sb.from('listings').select('*').order('created_at',{ascending:false}).then(function(result){
+    if(result.error){
+      console.error(result.error);
+      showToast('Chyba načítání: '+result.error.message);
+      renderListings();
+      return;
+    }
+    ALL=result.data.map(function(r){
+      return {
+        id:r.id, created_at:r.created_at,
+        name:r.name, email:r.email, faculty:r.faculty, year:r.year,
+        type:r.type, free:r.free, price:r.price,
+        subjects:r.subjects?r.subjects.split(',').map(function(s){return s.trim();}): [],
+        desc:r.description||'Bez popisu.'
+      };
+    });
+    renderListings();
+  });
+}
+
+// START
 setMode('offer');
 loadListings();
-document.getElementById('searchInput').addEventListener('input', renderListings);
-document.getElementById('facFilter').addEventListener('change', renderListings);
-document.getElementById('sortSel').addEventListener('change', renderListings);
-document.getElementById('mainModal').addEventListener('click', function(e){
-  if(e.target === document.getElementById('mainModal')) closeModal();
-});
-
 </script>
 </body>
 </html>
