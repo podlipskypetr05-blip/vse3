@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VŠE Tutoring — Student Peer Help Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Epilogue:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  // ============================================================
+  //  ⚙️  DOPLŇ SVOJE EMAILJS KLÍČE ZDE
+  // ============================================================
+  const EMAILJS_PUBLIC_KEY      = "TVUJ_PUBLIC_KEY";        // Account → General → Public Key
+  const EMAILJS_SERVICE_ID      = "TVUJ_SERVICE_ID";        // Email Services → tvoje Service ID
+  const EMAILJS_TEMPLATE_NOTIFY = "TVUJ_TEMPLATE_NOTIFY";   // šablona: notifikace tobě (adminovi)
+  const EMAILJS_TEMPLATE_AUTO   = "TVUJ_TEMPLATE_AUTO";     // šablona: auto-odpověď studentovi
+  // ============================================================
+  (function(){emailjs.init(EMAILJS_PUBLIC_KEY);})();
+</script>
+<style>
+  :root{--navy:#003366;--navy-dark:#00244d;--navy-mid:#0a4080;--blue:#1A6EC2;--yellow:#F5C842;--off:#F4F7FA;--muted:#6B7A8D;--border:#DDE3EC;--text:#1A2333;}
+  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+  body{font-family:'Epilogue',sans-serif;background:var(--off);color:var(--text);}
+
+  nav{background:var(--navy);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;}
+  .logo{display:flex;align-items:center;gap:.75rem;}
+  .logo-badge{background:var(--yellow);color:var(--navy-dark);font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;padding:.3rem .65rem;border-radius:6px;}
+  .logo-text{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:white;}
+  .logo-text span{color:var(--yellow);}
+  .nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
+  .nav-links a{text-decoration:none;color:rgba(255,255,255,.65);font-size:.88rem;font-weight:500;transition:color .2s;}
+  .nav-links a:hover{color:white;}
+  .btn-yellow{padding:.45rem 1.1rem;border:none;border-radius:6px;background:var(--yellow);color:var(--navy-dark);font-family:'Epilogue',sans-serif;font-size:.84rem;font-weight:700;cursor:pointer;transition:all .2s;}
+  .btn-yellow:hover{background:#e6b830;}
+
+  .hero{background:var(--navy);padding:5rem 5% 0;overflow:hidden;position:relative;}
+  .hero::before{content:'';position:absolute;top:-60px;right:-60px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(26,110,194,.35) 0%,transparent 70%);pointer-events:none;}
+  .hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:4rem;align-items:end;}
+  .hero-label{display:inline-flex;align-items:center;gap:.5rem;background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.3);padding:.35rem .9rem;border-radius:2rem;font-size:.8rem;font-weight:600;color:var(--yellow);text-transform:uppercase;letter-spacing:.05em;margin-bottom:1.5rem;}
+  .hero h1{font-family:'Syne',sans-serif;font-size:3.6rem;font-weight:800;color:white;line-height:1.08;margin-bottom:1.25rem;letter-spacing:-.02em;}
+  .hero h1 .hl{color:var(--yellow);}
+  .hero-sub{color:rgba(255,255,255,.6);font-size:1rem;line-height:1.7;max-width:480px;margin-bottom:2rem;}
+  .hero-actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:3rem;}
+  .btn-hero-y{padding:.8rem 1.8rem;background:var(--yellow);color:var(--navy-dark);border:none;border-radius:8px;font-family:'Epilogue',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s;}
+  .btn-hero-y:hover{background:#e6b830;transform:translateY(-1px);}
+  .btn-hero-o{padding:.8rem 1.8rem;background:none;color:white;border:1.5px solid rgba(255,255,255,.35);border-radius:8px;font-family:'Epilogue',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;}
+  .btn-hero-o:hover{border-color:white;background:rgba(255,255,255,.08);}
+  .hero-stats{display:flex;gap:2.5rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.12);}
+  .stat-n{font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:800;color:var(--yellow);}
+  .stat-l{font-size:.78rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em;margin-top:.1rem;}
+  .hero-visual{padding-bottom:2rem;}
+  .float-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:.75rem;animation:fc 5s ease-in-out infinite;}
+  .float-card:nth-child(2){animation-delay:1s;margin-left:1.5rem;}
+  .float-card:nth-child(3){animation-delay:2s;}
+  @keyframes fc{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .fc-top{display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem;}
+  .fc-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.78rem;color:var(--navy-dark);background:var(--yellow);flex-shrink:0;}
+  .fc-name{font-weight:600;font-size:.85rem;color:white;}.fc-fac{font-size:.73rem;color:rgba(255,255,255,.5);}
+  .fc-tags{display:flex;flex-wrap:wrap;gap:.3rem;}
+  .fc-tag{padding:.18rem .55rem;border-radius:4px;font-size:.7rem;font-weight:600;}
+  .fc-teach{background:rgba(245,200,66,.2);color:var(--yellow);}
+  .fc-seek{background:rgba(26,110,194,.3);color:#7BBFFF;}
+
+  .search-bar{background:white;border-bottom:1px solid var(--border);padding:1.25rem 5%;position:sticky;top:64px;z-index:90;}
+  .search-inner{max-width:1200px;margin:0 auto;display:flex;gap:.75rem;align-items:center;}
+  .search-wrap{flex:1;position:relative;}
+  .search-wrap span{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--muted);}
+  .search-input{width:100%;padding:.75rem 1rem .75rem 2.75rem;border:1.5px solid var(--border);border-radius:8px;font-family:'Epilogue',sans-serif;font-size:.9rem;outline:none;background:var(--off);transition:border-color .2s;}
+  .search-input:focus{border-color:var(--navy);background:white;}
+  .pills{display:flex;gap:.4rem;}
+  .pill{padding:.55rem 1rem;border-radius:6px;border:1.5px solid var(--border);background:none;font-family:'Epilogue',sans-serif;font-size:.82rem;font-weight:500;cursor:pointer;color:var(--muted);transition:all .2s;white-space:nowrap;}
+  .pill:hover{border-color:var(--navy);color:var(--navy);}
+  .pill.active{background:var(--navy);color:white;border-color:var(--navy);}
+
+  .main{max-width:1200px;margin:0 auto;padding:2.5rem 5%;display:grid;grid-template-columns:240px 1fr;gap:2rem;align-items:start;}
+  .sidebar{position:sticky;top:140px;}
+  .sb-box{background:white;border:1px solid var(--border);border-radius:12px;padding:1.4rem;margin-bottom:1rem;}
+  .sb-title{font-family:'Syne',sans-serif;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:1rem;}
+  .subj-list{list-style:none;}
+  .subj-item{display:flex;justify-content:space-between;align-items:center;padding:.5rem .6rem;border-radius:6px;cursor:pointer;font-size:.88rem;transition:all .15s;}
+  .subj-item:hover{background:var(--off);color:var(--navy);}
+  .subj-item.active{background:#EEF3FF;color:var(--navy);font-weight:600;}
+  .subj-count{font-size:.75rem;background:var(--border);color:var(--muted);padding:.1rem .45rem;border-radius:2rem;}
+  .subj-item.active .subj-count{background:var(--navy);color:white;}
+  .fac-sel{width:100%;padding:.6rem .8rem;border:1.5px solid var(--border);border-radius:6px;font-family:'Epilogue',sans-serif;font-size:.86rem;color:var(--text);background:white;outline:none;}
+  .fac-sel:focus{border-color:var(--navy);}
+
+  .lh{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;}
+  .lh-count{font-size:.88rem;color:var(--muted);}
+  .lh-count strong{color:var(--text);font-weight:600;}
+  .sort-sel{padding:.45rem .75rem;border:1.5px solid var(--border);border-radius:6px;font-family:'Epilogue',sans-serif;font-size:.83rem;color:var(--muted);background:white;outline:none;}
+  .grid{display:grid;gap:1rem;}
+  .card{background:white;border:1px solid var(--border);border-radius:12px;padding:1.4rem 1.6rem;display:grid;grid-template-columns:auto 1fr auto;gap:1rem;align-items:start;transition:all .2s;cursor:pointer;}
+  .card:hover{border-color:var(--navy);box-shadow:0 4px 20px rgba(0,51,102,.1);transform:translateY(-2px);}
+  .card.offering{border-left:3px solid var(--yellow);}
+  .card.seeking{border-left:3px solid var(--blue);}
+  .av{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:white;flex-shrink:0;}
+  .card-top{display:flex;align-items:center;gap:.6rem;margin-bottom:.3rem;flex-wrap:wrap;}
+  .card-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;}
+  .type-badge{padding:.2rem .6rem;border-radius:4px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+  .badge-offer{background:#FFF3C4;color:#8A6B00;}
+  .badge-seek{background:#E8F0FE;color:#1A4DA0;}
+  .card-fac{font-size:.8rem;color:var(--muted);margin-bottom:.6rem;}
+  .subjs{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.6rem;}
+  .stag{padding:.22rem .6rem;border-radius:4px;font-size:.75rem;font-weight:600;background:#EEF3FF;color:var(--navy);}
+  .card-desc{font-size:.88rem;color:var(--muted);line-height:1.6;}
+  .card-side{text-align:right;flex-shrink:0;}
+  .price-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:var(--navy);}
+  .price-val .per{font-family:'Epilogue',sans-serif;font-size:.72rem;color:var(--muted);font-weight:400;}
+  .price-free{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:#1A7A4A;}
+  .price-popt{font-size:.88rem;font-weight:600;color:var(--blue);}
+  .btn-write{display:block;margin-top:.6rem;padding:.5rem 1rem;background:var(--navy);color:white;border:none;border-radius:6px;font-family:'Epilogue',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .2s;white-space:nowrap;}
+  .btn-write:hover{background:var(--blue);}
+  .empty-state{grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);}
+
+  .how{background:var(--navy-dark);padding:5rem 5%;margin-top:4rem;}
+  .how-in{max-width:1200px;margin:0 auto;}
+  .how-label{display:inline-block;background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.3);color:var(--yellow);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:.3rem .9rem;border-radius:2rem;margin-bottom:1.25rem;}
+  .how-h2{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:white;margin-bottom:3rem;}
+  .how-h2 span{color:var(--yellow);}
+  .how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;}
+  .how-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:1.75rem;transition:background .2s;}
+  .how-card:hover{background:rgba(255,255,255,.1);}
+  .how-num{font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:var(--yellow);opacity:.6;line-height:1;margin-bottom:1rem;}
+  .how-card-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:white;margin-bottom:.5rem;}
+  .how-card-desc{font-size:.86rem;color:rgba(255,255,255,.55);line-height:1.6;}
+
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,20,50,.55);z-index:200;align-items:center;justify-content:center;padding:1.5rem;}
+  .overlay.open{display:flex;}
+  .modal{background:white;border-radius:16px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;padding:2.25rem;position:relative;animation:popIn .28s ease;}
+  @keyframes popIn{from{transform:scale(.95) translateY(10px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+  .modal-x{position:absolute;top:1.1rem;right:1.1rem;background:var(--off);border:none;border-radius:50%;width:34px;height:34px;font-size:1rem;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all .15s;}
+  .modal-x:hover{background:var(--border);color:var(--text);}
+  .modal-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;}
+  .modal-badge{background:var(--navy);color:var(--yellow);font-family:'Syne',sans-serif;font-weight:800;font-size:.75rem;padding:.2rem .5rem;border-radius:4px;}
+  .modal-title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--navy);}
+  .modal-sub{color:var(--muted);font-size:.88rem;margin-bottom:1.75rem;line-height:1.5;}
+  .mode-toggle{display:grid;grid-template-columns:1fr 1fr;background:var(--off);border-radius:8px;padding:4px;margin-bottom:1.5rem;gap:4px;}
+  .mode-btn{padding:.65rem;border:none;border-radius:6px;font-family:'Epilogue',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;background:none;color:var(--muted);}
+  .mode-btn.active{background:white;color:var(--navy);box-shadow:0 1px 6px rgba(0,0,0,.1);}
+  .form-group{margin-bottom:1.1rem;}
+  .form-label{display:block;font-size:.83rem;font-weight:600;color:var(--text);margin-bottom:.4rem;}
+  .form-input,.form-select,.form-textarea{width:100%;padding:.65rem .9rem;border:1.5px solid var(--border);border-radius:8px;font-family:'Epilogue',sans-serif;font-size:.9rem;color:var(--text);background:var(--off);outline:none;transition:border-color .2s;}
+  .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--navy);background:white;}
+  .form-textarea{resize:vertical;min-height:75px;}
+  .row-2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+  .tags-area{display:flex;flex-wrap:wrap;gap:.35rem;padding:.5rem .75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--off);min-height:48px;align-items:center;cursor:text;transition:border-color .2s;}
+  .tags-area:focus-within{border-color:var(--navy);background:white;}
+  .tag-chip{display:inline-flex;align-items:center;gap:.25rem;padding:.22rem .6rem;border-radius:4px;font-size:.76rem;font-weight:600;background:#EEF3FF;color:var(--navy);}
+  .tag-del{cursor:pointer;opacity:.55;font-size:.75rem;}
+  .tag-del:hover{opacity:1;}
+  .tag-inp{border:none;outline:none;font-family:'Epilogue',sans-serif;font-size:.88rem;background:none;min-width:90px;flex:1;color:var(--text);}
+  .form-hint{font-size:.74rem;color:var(--muted);margin-top:.3rem;}
+  .price-row{display:flex;align-items:center;gap:.5rem;}
+  .price-row .form-input{flex:1;}
+  .free-lbl{display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:var(--muted);cursor:pointer;white-space:nowrap;}
+  .btn-submit{width:100%;padding:.85rem;background:var(--navy);color:white;border:none;border-radius:8px;font-family:'Epilogue',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;margin-top:.5rem;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;}
+  .btn-submit:hover:not(:disabled){background:var(--navy-mid);}
+  .btn-submit:disabled{opacity:.6;cursor:not-allowed;}
+  .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .success-panel{display:none;text-align:center;padding:2rem 1rem;}
+  .success-icon{font-size:3.5rem;margin-bottom:1rem;}
+  .success-panel h3{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--navy);margin-bottom:.5rem;}
+  .success-panel p{color:var(--muted);font-size:.9rem;line-height:1.6;}
+
+  /* EmailJS config banner */
+  .config-banner{background:#FFF3C4;border:1.5px solid #C9A84C;border-radius:10px;padding:1rem 1.25rem;margin:1rem 5%;max-width:1200px;margin-left:auto;margin-right:auto;font-size:.85rem;line-height:1.6;color:#6B4E00;}
+  .config-banner strong{color:#4A3600;}
+  .config-banner code{background:rgba(0,0,0,.08);padding:.1rem .35rem;border-radius:4px;font-family:monospace;font-size:.82rem;}
+  .config-banner.hidden{display:none;}
+
+  .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--navy);color:white;padding:.85rem 1.4rem;border-radius:8px;font-size:.88rem;font-weight:500;opacity:0;transform:translateY(8px);transition:all .25s;z-index:999;pointer-events:none;border-left:3px solid var(--yellow);max-width:300px;}
+  .toast.show{opacity:1;transform:translateY(0);}
+  .toast.err{border-left-color:#E24B4A;}
+
+  footer{background:var(--navy-dark);border-top:1px solid rgba(255,255,255,.07);padding:2rem 5%;text-align:center;}
+  footer p{font-size:.83rem;color:rgba(255,255,255,.3);}
+  footer strong{color:rgba(255,255,255,.6);}
+
+  @media(max-width:900px){.hero-inner{grid-template-columns:1fr}.hero-visual{display:none}.hero h1{font-size:2.5rem}.main{grid-template-columns:1fr}.sidebar{position:static}.how-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-badge">VŠE</div>
+    <div class="logo-text">Tutoring<span>Hub</span></div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#listings">Nabídky</a></li>
+    <li><a href="#how">Jak to funguje</a></li>
+  </ul>
+  <div>
+    <button class="btn-yellow" onclick="openModal()">+ Přidat inzerát</button>
+  </div>
+</nav>
+
+<!-- Config warning banner (hides itself when keys are set) -->
+<div class="config-banner" id="configBanner">
+  ⚙️ <strong>Nastavení EmailJS:</strong> Otevři tento soubor v textovém editoru a doplň své klíče na začátku souboru:
+  <code>EMAILJS_PUBLIC_KEY</code>, <code>EMAILJS_SERVICE_ID</code>, <code>EMAILJS_TEMPLATE_NOTIFY</code>, <code>EMAILJS_TEMPLATE_AUTO</code>.
+  Pak emaily budou fungovat automaticky.
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-label">🎓 Pouze pro studenty VŠE Praha</div>
+      <h1>Najdi si tutora<br>od <span class="hl">spolužáka</span></h1>
+      <p class="hero-sub">Studenti VŠE sdílí znalosti navzájem. Nabídni, co umíš — nebo najdi pomoc s předmětem, který ti nejde.</p>
+      <div class="hero-actions">
+        <button class="btn-hero-y" onclick="openModal();setMode('offer')">Nabízím tutoring</button>
+        <button class="btn-hero-o" onclick="openModal();setMode('seek')">Hledám tutora</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-n" id="heroCount">8</div><div class="stat-l">Aktivní nabídky</div></div>
+        <div class="stat"><div class="stat-n">38</div><div class="stat-l">Předmětů</div></div>
+        <div class="stat"><div class="stat-n">5 fakult</div><div class="stat-l">VŠE pokryto</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="float-card">
+        <div class="fc-top"><div class="fc-av">TN</div><div><div class="fc-name">Tomáš Novák</div><div class="fc-fac">FIS · 3. ročník</div></div></div>
+        <div class="fc-tags"><span class="fc-tag fc-teach">🎓 Matematika</span><span class="fc-tag fc-teach">🎓 Statistika</span><span class="fc-tag fc-teach">🎓 Python</span></div>
+      </div>
+      <div class="float-card">
+        <div class="fc-top"><div class="fc-av" style="background:#1A6EC2">KH</div><div><div class="fc-name">Klára Horáková</div><div class="fc-fac">FFÚ · 2. ročník</div></div></div>
+        <div class="fc-tags"><span class="fc-tag fc-seek">📚 Hledám: Účetnictví</span><span class="fc-tag fc-seek">📚 Hledám: Makro</span></div>
+      </div>
+      <div class="float-card">
+        <div class="fc-top"><div class="fc-av" style="background:#C9A84C">MP</div><div><div class="fc-name">Martin Procházka</div><div class="fc-fac">FMV · 4. ročník</div></div></div>
+        <div class="fc-tags"><span class="fc-tag fc-teach">🎓 Mezinárodní právo</span><span class="fc-tag fc-teach">🎓 Němčina B2</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="search-bar">
+  <div class="search-inner">
+    <div class="search-wrap">
+      <span>🔍</span>
+      <input class="search-input" id="searchInput" type="text" placeholder="Hledej předmět, jméno nebo téma…">
+    </div>
+    <div class="pills">
+      <button class="pill active" onclick="setPill(this,'all')">Vše</button>
+      <button class="pill" onclick="setPill(this,'offer')">Nabízí tutoring</button>
+      <button class="pill" onclick="setPill(this,'seek')">Hledá tutora</button>
+    </div>
+  </div>
+</div>
+
+<div class="main" id="listings">
+  <aside class="sidebar">
+    <div class="sb-box">
+      <div class="sb-title">Fakulta</div>
+      <select class="fac-sel" id="facFilter" onchange="renderListings()">
+        <option value="all">Všechny fakulty</option>
+        <option value="FIS">FIS – Informatika</option>
+        <option value="FFÚ">FFÚ – Finance</option>
+        <option value="FMV">FMV – Mezinárodní vztahy</option>
+        <option value="FPH">FPH – Podnikohospodářská</option>
+        <option value="NF">NF – Národohospodářská</option>
+      </select>
+    </div>
+    <div class="sb-box">
+      <div class="sb-title">Předměty</div>
+      <ul class="subj-list" id="subjList">
+        <li class="subj-item active" onclick="filterSubject(this,'all')">Všechny <span class="subj-count" id="cntAll">—</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Matematika')">Matematika <span class="subj-count">—</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Statistika')">Statistika <span class="subj-count">—</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Účetnictví')">Účetnictví <span class="subj-count">—</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Ekonometrie')">Ekonometrie <span class="subj-count">—</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Excel')">Excel / Data <span class="subj-count">—</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Právo')">Právo <span class="subj-count">—</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Makroekonomie')">Makroekonomie <span class="subj-count">—</span></li>
+        <li class="subj-item" onclick="filterSubject(this,'Angličtina')">Jazyky <span class="subj-count">—</span></li>
+      </ul>
+    </div>
+    <button class="btn-yellow" style="width:100%;padding:.75rem;font-size:.92rem;border-radius:8px;" onclick="openModal()">+ Přidat svou nabídku</button>
+  </aside>
+  <div>
+    <div class="lh">
+      <div class="lh-count" id="listCount">Načítání...</div>
+      <select class="sort-sel" id="sortSel" onchange="renderListings()">
+        <option value="new">Nejnovější</option>
+        <option value="price-asc">Cena: od nejnižší</option>
+        <option value="price-desc">Cena: od nejvyšší</option>
+        <option value="free">Nejdříve zdarma</option>
+      </select>
+    </div>
+    <div class="grid" id="listGrid"></div>
+  </div>
+</div>
+
+<div class="how" id="how">
+  <div class="how-in">
+    <div class="how-label">Jak to funguje</div>
+    <h2 class="how-h2">Jednoduchý proces,<br><span>skutečné výsledky</span></h2>
+    <div class="how-grid">
+      <div class="how-card"><div class="how-num">01</div><div class="how-card-title">Přidej inzerát</div><div class="how-card-desc">Zvládáš Statistiku nebo Účetnictví? Nebo potřebuješ pomoc? Přidej inzerát za minutu.</div></div>
+      <div class="how-card"><div class="how-num">02</div><div class="how-card-title">Procházej nabídky</div><div class="how-card-desc">Filtruj podle fakulty, předmětu nebo ceny. Najdi spolužáka, který přesně ví, co potřebuješ.</div></div>
+      <div class="how-card"><div class="how-num">03</div><div class="how-card-title">Ozvi se přes email</div><div class="how-card-desc">Kontaktuj tutora přímo přes školní email. Žádný prostředník, žádné poplatky platformě.</div></div>
+      <div class="how-card"><div class="how-num">04</div><div class="how-card-title">Uč se od studentů</div><div class="how-card-desc">Spolužák ví, jak profesor zkoušky pojímá. Učení od někoho, kdo to prožil, je nejefektivnější.</div></div>
+    </div>
+  </div>
+</div>
+<footer><p><strong>VŠE TutoringHub</strong> — platforma pro studenty Vysoké školy ekonomické v Praze · Pouze pro @vse.cz emaily</p></footer>
+
+<!-- MODAL -->
+<div class="overlay" id="mainModal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal()">✕</button>
+    <div id="modalForm">
+      <div class="modal-header"><div class="modal-badge">VŠE</div></div>
+      <div class="modal-title">Přidat inzerát</div>
+      <p class="modal-sub">Po odeslání dostaneš potvrzovací email a administrátor bude informován o tvé nabídce.</p>
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="modeOffer" onclick="setMode('offer')">🎓 Nabízím tutoring</button>
+        <button class="mode-btn" id="modeSeek" onclick="setMode('seek')">📚 Hledám tutora</button>
+      </div>
+      <div class="row-2">
+        <div class="form-group"><label class="form-label">Jméno a příjmení</label><input class="form-input" id="inpName" type="text" placeholder="Jan Novák"></div>
+        <div class="form-group"><label class="form-label">Školní email</label><input class="form-input" id="inpEmail" type="email" placeholder="xnovj00@vse.cz"></div>
+      </div>
+      <div class="row-2">
+        <div class="form-group"><label class="form-label">Fakulta</label>
+          <select class="form-select" id="inpFac"><option value="">Vyber...</option><option>FIS</option><option>FFÚ</option><option>FMV</option><option>FPH</option><option>NF</option></select></div>
+        <div class="form-group"><label class="form-label">Ročník</label>
+          <select class="form-select" id="inpYear"><option value="">Ročník...</option><option>1. ročník Bc.</option><option>2. ročník Bc.</option><option>3. ročník Bc.</option><option>1. ročník Ing.</option><option>2. ročník Ing.</option></select></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" id="subjLabel">Předměty, které učím</label>
+        <div class="tags-area" id="tagsArea" onclick="document.getElementById('tagInp').focus()">
+          <input class="tag-inp" id="tagInp" placeholder="Napiš předmět a stiskni Enter…" onkeydown="addTag(event)">
+        </div>
+        <div class="form-hint">např. Matematika A, Statistika, Ekonometrie, Excel, Právo</div>
+      </div>
+      <div class="form-group"><label class="form-label">Popis</label><textarea class="form-textarea" id="inpDesc" placeholder="Krátce popiš, co nabízíš nebo co hledáš..."></textarea></div>
+      <div class="form-group" id="priceGrp">
+        <label class="form-label">Cena za hodinu</label>
+        <div class="price-row">
+          <input class="form-input" id="inpPrice" type="number" placeholder="např. 200">
+          <span style="color:var(--muted);font-size:.9rem">Kč/h</span>
+          <label class="free-lbl"><input type="checkbox" id="freeChk" onchange="toggleFree()"> Zdarma</label>
+        </div>
+      </div>
+      <button class="btn-submit" id="submitBtn" onclick="submitListing()">Zveřejnit inzerát →</button>
+    </div>
+    <div class="success-panel" id="successPanel">
+      <div class="success-icon">✅</div>
+      <h3>Inzerát přidán!</h3>
+      <p>Tvůj inzerát je teď viditelný pro všechny studenty VŠE.<br>Zkontroluj si email — poslali jsme ti potvrzení.</p>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const COLORS=['#003366','#1A6EC2','#C9A84C','#2C5545','#8B3A3A','#5B3F9A','#1A7A4A','#8A6B00'];
+const LISTINGS=[
+  {id:1,name:'Tomáš Novák',faculty:'FIS',year:'3. ročník Bc.',type:'offer',subjects:['Matematika','Statistika','Python'],desc:'Zvládl jsem Matematiku A i B s áčkem. Pomůžu s příklady, zkouškami i pochopením látky.',price:200,free:false,email:'xnovt10@vse.cz'},
+  {id:2,name:'Klára Horáková',faculty:'FFÚ',year:'2. ročník Bc.',type:'seek',subjects:['Účetnictví','Makroekonomie'],desc:'Potřebuji pomoc s Účetnictvím 2 a základy makro. Nejlépe někdo z FFÚ nebo FPH.',price:null,free:false,email:'xhork20@vse.cz'},
+  {id:3,name:'Martin Procházka',faculty:'FMV',year:'4. ročník Bc.',type:'offer',subjects:['Mezinárodní právo','Němčina'],desc:'Lektoruji právo pro FMV a pomáhám s němčinou (B2 certifikát). Flexibilní časy.',price:250,free:false,email:'xprom30@vse.cz'},
+  {id:4,name:'Adéla Svobodová',faculty:'FPH',year:'1. ročník Ing.',type:'offer',subjects:['Excel','Statistika','R'],desc:'Pomůžu s datovou analýzou, Excelem i R. Pracuji jako analytik na brigádě.',price:0,free:true,email:'xsvoa01@vse.cz'},
+  {id:5,name:'Ondřej Blažek',faculty:'NF',year:'2. ročník Bc.',type:'seek',subjects:['Ekonometrie','Matematika'],desc:'Zápasím s Ekonometrií. Potřebuji někoho, kdo mi vysvětlí regresi a časové řady.',price:null,free:false,email:'xblao50@vse.cz'},
+  {id:6,name:'Lucie Kratochvílová',faculty:'FFÚ',year:'3. ročník Bc.',type:'offer',subjects:['Účetnictví','Finanční analýza','Daně'],desc:'Účetnictví 1, 2 i 3 mám za sebou s výbornými výsledky.',price:180,free:false,email:'xkral60@vse.cz'},
+  {id:7,name:'Pavel Hájek',faculty:'FIS',year:'2. ročník Ing.',type:'offer',subjects:['SQL','Python','Datové modelování'],desc:'Pracuji jako data engineer a rád předám zkušenosti pro trh práce.',price:300,free:false,email:'xhajp07@vse.cz'},
+  {id:8,name:'Eva Nováková',faculty:'FMV',year:'3. ročník Bc.',type:'seek',subjects:['Angličtina','Španělština'],desc:'Hledám konverzačního partnera nebo lektora pro zlepšení španělštiny.',price:null,free:false,email:'xnovae08@vse.cz'},
+];
+
+let subjTags=[],currentMode='offer',filterMode='all',activeSubj='all';
+
+function getColor(n){let h=0;for(let c of n)h+=c.charCodeAt(0);return COLORS[h%COLORS.length];}
+function initials(n){return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
+function showToast(msg,err=false){const t=document.getElementById('toast');t.textContent=msg;t.classList.toggle('err',err);t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
+
+function priceHTML(l){
+  if(l.type==='seek') return '<div class="price-popt">Poptávka</div>';
+  if(l.free) return '<div class="price-free">Zdarma</div>';
+  return `<div class="price-val">${l.price} <span class="per">Kč/h</span></div>`;
+}
+
+function renderListings(){
+  const search=document.getElementById('searchInput').value.toLowerCase();
+  const fac=document.getElementById('facFilter').value;
+  const sort=document.getElementById('sortSel').value;
+  let data=[...LISTINGS];
+  if(filterMode!=='all') data=data.filter(l=>l.type===filterMode);
+  if(activeSubj!=='all') data=data.filter(l=>l.subjects.some(s=>s.toLowerCase().includes(activeSubj.toLowerCase())));
+  if(fac!=='all') data=data.filter(l=>l.faculty===fac);
+  if(search) data=data.filter(l=>l.name.toLowerCase().includes(search)||l.subjects.some(s=>s.toLowerCase().includes(search))||l.desc.toLowerCase().includes(search));
+  if(sort==='price-asc') data.sort((a,b)=>(a.free?0:a.price||999)-(b.free?0:b.price||999));
+  else if(sort==='price-desc') data.sort((a,b)=>(b.price||0)-(a.price||0));
+  else if(sort==='free') data.sort((a,b)=>(b.free?1:0)-(a.free?1:0));
+  else data.sort((a,b)=>b.id-a.id);
+  const grid=document.getElementById('listGrid');
+  const cnt=document.getElementById('listCount');
+  document.getElementById('heroCount').textContent=LISTINGS.length;
+  if(!data.length){grid.innerHTML=`<div class="empty-state"><p>🔎 Žádné inzeráty nenalezeny. Zkus jiný filtr nebo <strong onclick="openModal()" style="cursor:pointer;color:var(--navy)">přidej první nabídku</strong>.</p></div>`;cnt.innerHTML='0 inzerátů';return;}
+  cnt.innerHTML=`Zobrazeno <strong>${data.length}</strong> inzerátů`;
+  grid.innerHTML=data.map(l=>`
+    <div class="card ${l.type==='seek'?'seeking':'offering'}">
+      <div class="av" style="background:${getColor(l.name)}">${initials(l.name)}</div>
+      <div>
+        <div class="card-top"><span class="card-name">${l.name}</span><span class="type-badge ${l.type==='offer'?'badge-offer':'badge-seek'}">${l.type==='offer'?'🎓 Nabízí':'📚 Hledá'}</span></div>
+        <div class="card-fac">${l.faculty} · ${l.year}</div>
+        <div class="subjs">${l.subjects.map(s=>`<span class="stag">${s}</span>`).join('')}</div>
+        <div class="card-desc">${l.desc}</div>
+      </div>
+      <div class="card-side">
+        ${priceHTML(l)}
+        <button class="btn-write" onclick="event.stopPropagation();window.location.href='mailto:${l.email}?subject=VŠE%20TutoringHub%20–%20Zájem%20o%20spolupráci'">Napsat</button>
+      </div>
+    </div>`).join('');
+  document.getElementById('cntAll').textContent=LISTINGS.length;
+  document.querySelectorAll('#subjList .subj-item:not(:first-child)').forEach(li=>{
+    const txt=li.textContent.trim().split('\n')[0].trim().split(' ')[0];
+    const c=LISTINGS.filter(l=>l.subjects.some(s=>s.toLowerCase().includes(txt.toLowerCase()))).length;
+    li.querySelector('.subj-count').textContent=c||'0';
+  });
+}
+
+function setPill(btn,mode){document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));btn.classList.add('active');filterMode=mode==='offer'?'offer':mode==='seek'?'seek':'all';renderListings();}
+function filterSubject(el,s){document.querySelectorAll('.subj-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');activeSubj=s;renderListings();}
+document.getElementById('searchInput').addEventListener('input',renderListings);
+
+function openModal(){document.getElementById('mainModal').classList.add('open');}
+function closeModal(){
+  document.getElementById('mainModal').classList.remove('open');
+  document.getElementById('modalForm').style.display='block';
+  document.getElementById('successPanel').style.display='none';
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=false;btn.innerHTML='Zveřejnit inzerát →';
+}
+document.getElementById('mainModal').addEventListener('click',e=>{if(e.target===document.getElementById('mainModal'))closeModal();});
+
+function setMode(m){
+  currentMode=m;
+  document.getElementById('modeOffer').classList.toggle('active',m==='offer');
+  document.getElementById('modeSeek').classList.toggle('active',m==='seek');
+  document.getElementById('subjLabel').textContent=m==='offer'?'Předměty, které učím':'Předměty, se kterými potřebuji pomoc';
+  document.getElementById('priceGrp').style.display=m==='offer'?'block':'none';
+}
+
+function addTag(e){
+  if(e.key!=='Enter'&&e.key!==',') return;
+  e.preventDefault();
+  const inp=document.getElementById('tagInp');
+  const val=inp.value.trim().replace(/,$/,'');
+  if(!val||subjTags.includes(val)){inp.value='';return;}
+  subjTags.push(val);
+  const area=document.getElementById('tagsArea');
+  const chip=document.createElement('span');
+  chip.className='tag-chip';
+  chip.innerHTML=`${val} <span class="tag-del" onclick="rmTag(this,'${val}')">✕</span>`;
+  area.insertBefore(chip,inp);
+  inp.value='';
+}
+function rmTag(el,v){subjTags=subjTags.filter(t=>t!==v);el.parentElement.remove();}
+function toggleFree(){const c=document.getElementById('freeChk').checked;document.getElementById('inpPrice').disabled=c;if(c)document.getElementById('inpPrice').value='';}
+
+async function submitListing(){
+  const name=document.getElementById('inpName').value.trim();
+  const email=document.getElementById('inpEmail').value.trim();
+  const fac=document.getElementById('inpFac').value;
+  const year=document.getElementById('inpYear').value;
+  const desc=document.getElementById('inpDesc').value.trim();
+  if(!name||!email||!fac||!year||subjTags.length===0){showToast('Vyplň prosím všechna povinná pole.',true);return;}
+  if(!email.includes('@vse.cz')&&!email.includes('@student.vse.cz')){showToast('Použij prosím svůj školní email @vse.cz',true);return;}
+  const isFree=document.getElementById('freeChk').checked;
+  const priceVal=isFree?0:parseInt(document.getElementById('inpPrice').value)||null;
+  const typeLabel=currentMode==='offer'?'Nabídka tutoringu':'Poptávka po tutoringu';
+  const priceLabel=currentMode==='seek'?'—':isFree?'Zdarma':(priceVal?priceVal+' Kč/h':'neuvedena');
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;
+  btn.innerHTML='<span class="spinner"></span> Odesílám…';
+  const params={
+    student_name:name,
+    student_email:email,
+    faculty:fac,
+    year:year,
+    type:typeLabel,
+    subjects:subjTags.join(', '),
+    description:desc||'(bez popisu)',
+    price:priceLabel,
+  };
+
+  // Check if keys are configured
+  const keysSet = EMAILJS_PUBLIC_KEY !== 'TVUJ_PUBLIC_KEY';
+
+  try {
+    if(keysSet){
+      // Notifikace adminovi
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_NOTIFY, {...params, to_email:'podlipsky.petr05@gmail.com'});
+      // Auto-odpověď studentovi
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_AUTO, {...params, to_email:email});
+    }
+    // Přidej do listu vždy (i bez emailů pro demo)
+    LISTINGS.unshift({id:Date.now(),name,faculty:fac,year,type:currentMode==='offer'?'offer':'seek',subjects:[...subjTags],desc:desc||'Bez popisu.',price:priceVal,free:isFree,email});
+    renderListings();
+    subjTags=[];
+    document.getElementById('tagsArea').querySelectorAll('.tag-chip').forEach(el=>el.remove());
+    document.getElementById('modalForm').style.display='none';
+    document.getElementById('successPanel').style.display='block';
+    const msg=keysSet?`Inzerát přidán a emaily odeslány, ${name}! 🎓`:`Inzerát přidán! (EmailJS klíče ještě nejsou nastaveny — emaily neodeslány)`;
+    setTimeout(()=>{closeModal();showToast(msg);},2500);
+  } catch(err){
+    console.error('EmailJS:',err);
+    btn.disabled=false;
+    btn.innerHTML='Zveřejnit inzerát →';
+    showToast('Nepodařilo se odeslat email. Zkontroluj EmailJS klíče v kódu.',true);
+  }
+}
+
+// Hide config banner if keys are set
+if(EMAILJS_PUBLIC_KEY!=='TVUJ_PUBLIC_KEY') document.getElementById('configBanner').classList.add('hidden');
+
+setMode('offer');
+renderListings();
+</script>
+</body>
+</html>
